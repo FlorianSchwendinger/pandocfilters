@@ -1,0 +1,27 @@
+Package: pandocfilters
+Title: Pandoc Filters for R
+Version: 0.1-1
+Authors@R: c(person("Florian", "Schwendinger", 
+                    role = c("aut", "cre"),
+                    email = "FlorianSchwendinger@gmx.at"),
+             person("Kurt", "Hornik", role = "aut"))
+Description: The document converter 'pandoc' <http://pandoc.org/> is widely used
+    in the R community. One feature of 'pandoc' is that it can produce and consume
+    JSON-formatted abstract syntax trees (AST). This allows to transform a given
+    source document into JSON-formatted AST, alter it by so called filters and pass
+    the altered JSON-formatted AST back to 'pandoc'. This package provides functions
+    which allow to write such filters in native R code. 
+    Although this package is inspired by the Python package 'pandocfilters' 
+    <https://github.com/jgm/pandocfilters/>, it provides additional convenience functions which make it simple to use the 'pandocfilters' package as a 
+    report generator. Since 'pandocfilters' inherits most of it's functionality
+    from 'pandoc' it can create documents in many formats 
+    (for more information see <http://pandoc.org/>) but is also bound to the same
+    limitations as 'pandoc'.
+URL: http://pandoc.org/, https://github.com/jgm/pandocfilters/
+Depends:
+    R (>= 2.15)
+Imports:
+    jsonlite, base
+SystemRequirements: pandoc (> 1.12)
+License: GPL-3
+RoxygenNote: 5.0.1

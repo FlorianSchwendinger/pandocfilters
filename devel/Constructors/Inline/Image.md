@@ -1,0 +1,1 @@
+![some_text](https://image_url.jpg "Logo_Title_Text_1")
