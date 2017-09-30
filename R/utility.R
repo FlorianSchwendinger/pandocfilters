@@ -20,7 +20,7 @@ pandoc_to_json <- function(file, from="markdown") {
 
 pandoc_from_json <- function(json, to) {
     args <- sprintf("%s | pandoc -f json -t %s", shQuote(json), to)
-    system2("pandoc", args, stdout=TRUE, stderr=TRUE)
+    system2("echo", args, stdout=TRUE, stderr=TRUE)
 }
 
 

@@ -1,0 +1,433 @@
+context("inline")
+
+test_that("Str", {
+
+    ## Test Str with Header
+    x <- pandocfilters:::test(list(Header(list(Str("Hello R!")))))
+    expect_equal(x, "<h1>Hello R!</h1>")
+    x <- pandocfilters:::test(list(Header(Str("Hello R!"))))
+    expect_equal(x, "<h1>Hello R!</h1>")
+
+    ## Test Str with Plain
+    x <- pandocfilters:::test(list(Plain(list(Str("Hello R!")))))
+    expect_equal(x, "Hello R!")
+    x <- pandocfilters:::test(list(Plain(Str("Hello R!"))))
+    expect_equal(x, "Hello R!")
+
+} )
+
+
+test_that("Emph", {
+
+    ## Test Emph with Header
+    x <- pandocfilters:::test(list(Header(list(Emph(list(Str("Hello R!")))))))
+    expect_equal(x, "<h1><em>Hello R!</em></h1>")
+    x <- pandocfilters:::test(list(Header(list(Emph(Str("Hello R!"))))))
+    expect_equal(x, "<h1><em>Hello R!</em></h1>")
+    x <- pandocfilters:::test(list(Header(Emph(Str("Hello R!")))))
+    expect_equal(x, "<h1><em>Hello R!</em></h1>")   
+
+    ## Test Emph with Plain
+    x <- pandocfilters:::test(list(Plain(list(Emph(list(Str("Hello R!")))))))
+    expect_equal(x, "<em>Hello R!</em>")
+    x <- pandocfilters:::test(list(Plain(list(Emph(Str("Hello R!"))))))
+    expect_equal(x, "<em>Hello R!</em>")
+    x <- pandocfilters:::test(list(Plain(Emph(Str("Hello R!")))))
+    expect_equal(x, "<em>Hello R!</em>")
+    
+} )
+
+
+test_that("Strong", {
+
+    ## Test Strong with Header
+    x <- pandocfilters:::test(list(Header(list(Strong(list(Str("Hello R!")))))))
+    expect_equal(x, "<h1><strong>Hello R!</strong></h1>")
+    x <- pandocfilters:::test(list(Header(list(Strong(Str("Hello R!"))))))
+    expect_equal(x, "<h1><strong>Hello R!</strong></h1>")
+    x <- pandocfilters:::test(list(Header(Strong(Str("Hello R!")))))
+    expect_equal(x, "<h1><strong>Hello R!</strong></h1>")   
+
+    ## Test Strong with Plain
+    x <- pandocfilters:::test(list(Plain(list(Strong(list(Str("Hello R!")))))))
+    expect_equal(x, "<strong>Hello R!</strong>")
+    x <- pandocfilters:::test(list(Plain(list(Strong(Str("Hello R!"))))))
+    expect_equal(x, "<strong>Hello R!</strong>")
+    x <- pandocfilters:::test(list(Plain(Strong(Str("Hello R!")))))
+    expect_equal(x, "<strong>Hello R!</strong>")
+    
+} )
+
+
+
+test_that("Strikeout", {
+
+    ## Test Strikeout with Header
+    x <- pandocfilters:::test(list(Header(list(Strikeout(list(Str("Hello R!")))))))
+    expect_equal(x, "<h1><del>Hello R!</del></h1>")
+    x <- pandocfilters:::test(list(Header(list(Strikeout(Str("Hello R!"))))))
+    expect_equal(x, "<h1><del>Hello R!</del></h1>")
+    x <- pandocfilters:::test(list(Header(Strikeout(Str("Hello R!")))))
+    expect_equal(x, "<h1><del>Hello R!</del></h1>")   
+
+    ## Test Strikeout with Plain
+    x <- pandocfilters:::test(list(Plain(list(Strikeout(list(Str("Hello R!")))))))
+    expect_equal(x, "<del>Hello R!</del>")
+    x <- pandocfilters:::test(list(Plain(list(Strikeout(Str("Hello R!"))))))
+    expect_equal(x, "<del>Hello R!</del>")
+    x <- pandocfilters:::test(list(Plain(Strikeout(Str("Hello R!")))))
+    expect_equal(x, "<del>Hello R!</del>")
+    
+} )
+
+
+test_that("Superscript", {
+
+    ## Test Superscript with Header
+    x <- pandocfilters:::test(list(Header(list(Superscript(list(Str("Hello R!")))))))
+    expect_equal(x, "<h1><sup>Hello R!</sup></h1>")
+    x <- pandocfilters:::test(list(Header(list(Superscript(Str("Hello R!"))))))
+    expect_equal(x, "<h1><sup>Hello R!</sup></h1>")
+    x <- pandocfilters:::test(list(Header(Superscript(Str("Hello R!")))))
+    expect_equal(x, "<h1><sup>Hello R!</sup></h1>")   
+
+    ## Test Superscript with Plain
+    x <- pandocfilters:::test(list(Plain(list(Superscript(list(Str("Hello R!")))))))
+    expect_equal(x, "<sup>Hello R!</sup>")
+    x <- pandocfilters:::test(list(Plain(list(Superscript(Str("Hello R!"))))))
+    expect_equal(x, "<sup>Hello R!</sup>")
+    x <- pandocfilters:::test(list(Plain(Superscript(Str("Hello R!")))))
+    expect_equal(x, "<sup>Hello R!</sup>")
+    
+} )
+
+
+test_that("Subscript", {
+
+    ## Test Subscript with Header
+    x <- pandocfilters:::test(list(Header(list(Subscript(list(Str("Hello R!")))))))
+    expect_equal(x, "<h1><sub>Hello R!</sub></h1>")
+    x <- pandocfilters:::test(list(Header(list(Subscript(Str("Hello R!"))))))
+    expect_equal(x, "<h1><sub>Hello R!</sub></h1>")
+    x <- pandocfilters:::test(list(Header(Subscript(Str("Hello R!")))))
+    expect_equal(x, "<h1><sub>Hello R!</sub></h1>")   
+
+    ## Test Subscript with Plain
+    x <- pandocfilters:::test(list(Plain(list(Subscript(list(Str("Hello R!")))))))
+    expect_equal(x, "<sub>Hello R!</sub>")
+    x <- pandocfilters:::test(list(Plain(list(Subscript(Str("Hello R!"))))))
+    expect_equal(x, "<sub>Hello R!</sub>")
+    x <- pandocfilters:::test(list(Plain(Subscript(Str("Hello R!")))))
+    expect_equal(x, "<sub>Hello R!</sub>")
+    
+} )
+
+
+test_that("SmallCaps", {
+
+    ## Test SmallCaps with Header
+    x <- pandocfilters:::test(list(Header(list(SmallCaps(list(Str("Hello R!")))))))
+    expect_equal(x, "<h1><span style=\"font-variant: small-caps;\">Hello R!</span></h1>")
+    x <- pandocfilters:::test(list(Header(list(SmallCaps(Str("Hello R!"))))))
+    expect_equal(x, "<h1><span style=\"font-variant: small-caps;\">Hello R!</span></h1>")
+    x <- pandocfilters:::test(list(Header(SmallCaps(Str("Hello R!")))))
+    expect_equal(x, "<h1><span style=\"font-variant: small-caps;\">Hello R!</span></h1>")   
+
+    ## Test SmallCaps with Plain
+    x <- pandocfilters:::test(list(Plain(list(SmallCaps(list(Str("Hello R!")))))))
+    expect_equal(x, "<span style=\"font-variant: small-caps;\">Hello R!</span>")
+    x <- pandocfilters:::test(list(Plain(list(SmallCaps(Str("Hello R!"))))))
+    expect_equal(x, "<span style=\"font-variant: small-caps;\">Hello R!</span>")
+    x <- pandocfilters:::test(list(Plain(SmallCaps(Str("Hello R!")))))
+    expect_equal(x, "<span style=\"font-variant: small-caps;\">Hello R!</span>")
+    
+} )
+
+
+test_that("Quoted", {
+
+    ## Test Quoted with Header
+    x <- pandocfilters:::test(list(Header(list(Quoted(list(Str("Hello R!")))))))
+    expect_equal(x, "<h1>“Hello R!”</h1>")
+    x <- pandocfilters:::test(list(Header(list(Quoted(Str("Hello R!"))))))
+    expect_equal(x, "<h1>“Hello R!”</h1>")
+    x <- pandocfilters:::test(list(Header(Quoted(Str("Hello R!")))))
+    expect_equal(x, "<h1>“Hello R!”</h1>")   
+
+    ## Test Quoted with Plain
+    x <- pandocfilters:::test(list(Plain(list(Quoted(list(Str("Hello R!")))))))
+    expect_equal(x, "“Hello R!”")
+    x <- pandocfilters:::test(list(Plain(list(Quoted(Str("Hello R!"))))))
+    expect_equal(x, "“Hello R!”")
+    x <- pandocfilters:::test(list(Plain(Quoted(Str("Hello R!")))))
+    expect_equal(x, "“Hello R!”")
+    
+} )
+
+
+test_that("Cite", {
+
+    ci <- Citation(suffix=list(Str("Suffix_1")),
+                   id="Citation_ID_1", prefix=list(Str("Prefix_1")))
+
+    ## Test Cite with Header
+    cite <- Cite(list(ci), list(Str("some text")))
+    x <- pandocfilters:::test(list(Header(list(cite))), to="markdown")
+    expect_equal(x, c("@Citation_ID_1 [Suffix\\_1]", "=========================="))
+
+    cite <- Cite(list(ci), Str("some text"))
+    x <- pandocfilters:::test(list(Header(list(cite))), to="markdown")
+    expect_equal(x, c("@Citation_ID_1 [Suffix\\_1]", "=========================="))
+
+    cite <- Cite(ci, Str("some text"))
+    x <- pandocfilters:::test(list(Header(list(cite))), to="markdown")
+    expect_equal(x, c("@Citation_ID_1 [Suffix\\_1]", "=========================="))
+
+    x <- pandocfilters:::test(list(Header(cite)), to="markdown")
+    expect_equal(x, c("@Citation_ID_1 [Suffix\\_1]", "=========================="))
+
+    ## Test Cite with Plain
+    cite <- Cite(list(ci), list(Str("some text")))
+    x <- pandocfilters:::test(list(Plain(list(cite))), to="markdown")
+    expect_equal(x, "@Citation_ID_1 [Suffix\\_1]")
+
+    cite <- Cite(list(ci), Str("some text"))
+    x <- pandocfilters:::test(list(Plain(list(cite))), to="markdown")
+    expect_equal(x, "@Citation_ID_1 [Suffix\\_1]")
+
+    cite <- Cite(ci, Str("some text"))
+    x <- pandocfilters:::test(list(Plain(list(cite))), to="markdown")
+    expect_equal(x, "@Citation_ID_1 [Suffix\\_1]")
+
+    x <- pandocfilters:::test(list(Plain(cite)), to="markdown")
+    expect_equal(x, "@Citation_ID_1 [Suffix\\_1]")
+    
+} )
+
+
+test_that("Str", {
+
+    y <- c("`lm(hello ~ world)`{#my_r_inline_code .R startFrom=\"0\"}",  
+           "=======================================================")
+
+    inline <- Code("lm(hello ~ world)", "my_r_inline_code", "R", TRUE, 0)
+
+    ## Test Str with Header
+    x <- pandocfilters:::test(list(Header(list(inline))), "markdown")
+    expect_equal(x, y)
+    
+    x <- pandocfilters:::test(list(Header(inline)), "markdown")
+    expect_equal(x, y)
+
+    ## Test Str with Plain
+    x <- pandocfilters:::test(list(Plain(list(inline))), "markdown")
+    expect_equal(x, y[1])
+
+    x <- pandocfilters:::test(list(Plain(inline)), "markdown")
+    expect_equal(x, y[1])
+
+} )
+
+
+test_that("Space", {
+
+    y <- "<h1> </h1>"
+    inline <- Space()
+
+    ## Test Space with Header
+    x <- pandocfilters:::test(list(Header(list(inline))))
+    expect_equal(x, y)
+
+    x <- pandocfilters:::test(list(Header(inline)))
+    expect_equal(x, y)
+
+    y <- " "
+    ## Test Space with Plain
+    x <- pandocfilters:::test(list(Plain(list(inline))))
+    expect_equal(x, y)
+
+    x <- pandocfilters:::test(list(Plain(inline)))
+    expect_equal(x, y)
+
+} )
+
+
+test_that("SoftBreak", {
+
+    if ( pandocfilters:::get_pandoc_version() > 1.15 ) {
+
+        y <- "<h1> </h1>"
+        inline <- SoftBreak()
+
+        ## Test SoftBreak with Header
+        x <- pandocfilters:::test(list(Header(list(inline))))
+        expect_equal(x, y)
+
+        x <- pandocfilters:::test(list(Header(inline)))
+        expect_equal(x, y)
+
+        y <- " "
+        ## Test SoftBreak with Plain
+        x <- pandocfilters:::test(list(Plain(list(inline))))
+        expect_equal(x, y)
+
+        x <- pandocfilters:::test(list(Plain(inline)))
+        expect_equal(x, y)
+
+    }
+
+} )
+
+
+test_that("LineBreak", {
+
+    ## FIX an api difference between pandoc 1.16 and lower
+    j <- function(...) paste(..., collapse="")
+    
+    y <- j(c("<h1><br />", "</h1>"))
+    inline <- LineBreak()
+
+    ## Test LineBreak with Header
+    x <- j(pandocfilters:::test(list(Header(list(inline)))))
+    expect_equal(x, y)
+
+    x <- j(pandocfilters:::test(list(Header(inline))))
+    expect_equal(x, y)
+
+    y <- j(c("<br />", ""))
+    ## Test LineBreak with Plain
+    x <- j(pandocfilters:::test(list(Plain(list(inline)))))
+    expect_equal(x, y)
+
+    x <- j(pandocfilters:::test(list(Plain(inline))))
+    expect_equal(x, y)
+
+} )
+
+
+test_that("Math", {
+
+    inline <- Math("e^x")
+    y <- if ( get_pandoc_version() < 1.16 ) "$e^x$" else "\\(e^x\\)"
+
+    ## Test Math with Plain
+    x <- pandocfilters:::test(list(Plain(list(inline))), "latex")
+    expect_equal(x, y)
+
+    x <- pandocfilters:::test(list(Plain(inline)), "latex")
+    expect_equal(x, y)
+
+} )
+
+
+test_that("RawInline", {
+
+    y <- c("some RawInline", "==============")
+    inline <- RawInline("latex", "some RawInline")
+
+    ## Test Space with Header
+    x <- pandocfilters:::test(list(Header(list(inline))), "markdown")
+    expect_equal(x, y)
+
+    x <- pandocfilters:::test(list(Header(inline)), "markdown")
+    expect_equal(x, y)
+
+    ## Test Space with Plain
+    x <- pandocfilters:::test(list(Plain(list(inline))), "markdown")
+    expect_equal(x, y[1])
+
+    x <- pandocfilters:::test(list(Plain(inline)), "markdown")
+    expect_equal(x, y[1])
+
+} )
+
+
+test_that("Link", {
+
+    y <- "<h1><a href=\"https://cran.r-project.org/\" title=\"some title\">Text_Shown</a></h1>"
+    inline <- Link("https://cran.r-project.org/", list(Str("Text_Shown")), "some title")
+
+    ## Test Link with Header
+    x <- pandocfilters:::test(list(Header(list(inline))))
+    expect_equal(x, y)
+
+    x <- pandocfilters:::test(list(Header(inline)))
+    expect_equal(x, y)
+
+    y <- "<a href=\"https://cran.r-project.org/\" title=\"some title\">Text_Shown</a>"
+    ## Test Link with Plain
+    x <- pandocfilters:::test(list(Plain(list(inline))))
+    expect_equal(x, y)
+
+    x <- pandocfilters:::test(list(Plain(inline)))
+    expect_equal(x, y)
+
+} )
+
+
+test_that("Image", {
+
+    y <- "<h1><img src=\"https:://Rlogo.jpg\" title=\"fig:some_caption\" alt=\"some_text\" /></h1>"
+    inline <- Image("https:://Rlogo.jpg", list(Str("some_text")), "fig:some_caption")
+
+    ## Test Image with Header
+    x <- pandocfilters:::test(list(Header(list(inline))))
+    expect_equal(x, y)
+
+    x <- pandocfilters:::test(list(Header(inline)))
+    expect_equal(x, y)
+
+    y <- "<img src=\"https:://Rlogo.jpg\" title=\"fig:some_caption\" alt=\"some_text\" />"
+    ## Test Image with Plain
+    x <- pandocfilters:::test(list(Plain(list(inline))))
+    expect_equal(x, y)
+
+    x <- pandocfilters:::test(list(Plain(inline)))
+    expect_equal(x, y)
+
+} )
+
+
+test_that("Note", {
+
+    block <- Plain(list(Str("x")))
+    inline <- Note(block)
+    y <- c("<h1><a href=\"#fn1\" class=\"footnoteRef\" id=\"fnref1\"><sup>1</sup></a></h1>",
+           "<div class=\"footnotes\">", "<hr />", "<ol>",
+           "<li id=\"fn1\">x<a href=\"#fnref1\">↩</a></li>", "</ol>", "</div>")
+
+    ## Test Str with Header
+    x <- pandocfilters:::test(list(Header(Note(list(block)))))
+    expect_equal(x, y)
+    x <- pandocfilters:::test(list(Header(Note(block))))
+    expect_equal(x, y)
+
+    y <- c("<a href=\"#fn1\" class=\"footnoteRef\" id=\"fnref1\"><sup>1</sup></a>", 
+           "<div class=\"footnotes\">", "<hr />", "<ol>", 
+           "<li id=\"fn1\">x<a href=\"#fnref1\">↩</a></li>", "</ol>", "</div>")
+    ## Test Str with Plain
+    x <- pandocfilters:::test(list(Plain(Note(list(block)))))
+    expect_equal(x, y)
+    x <- pandocfilters:::test(list(Plain(Note(block))))
+    expect_equal(x, y)
+
+} )
+
+
+
+test_that("Span", {
+
+    attr <- Attr("A", c("B"), list(c("C", "D")))
+    inline <- Span(attr, list(Str("some inline string")))
+
+    y <- "<h1><span id=\"A\" class=\"B\" C=\"D\">some inline string</span></h1>"
+    ## Test Image with Header
+    x <- pandocfilters:::test(list(Header(inline)))
+    expect_equal(x, y)
+
+    y <- "<span id=\"A\" class=\"B\" C=\"D\">some inline string</span>"
+    ## Test Image with Plain
+    x <- pandocfilters:::test(list(Plain(list(inline))))
+    expect_equal(x, y)
+
+} )
