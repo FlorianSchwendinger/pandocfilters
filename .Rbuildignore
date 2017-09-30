@@ -5,3 +5,5 @@ inst/testing
 inst/doc
 Makefile
 README.pdf
+^.*\.Rproj$
+^\.Rproj\.user$

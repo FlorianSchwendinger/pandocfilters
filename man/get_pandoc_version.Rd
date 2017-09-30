@@ -9,4 +9,3 @@ get_pandoc_version()
 \description{
 Get the version of pandoc.
 }
-

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utility.R
 \name{set_pandoc_version}
 \alias{set_pandoc_version}
-\title{Set Pandoc Version}
+\title{Set Pandoc Version.}
 \usage{
 set_pandoc_version(x)
 }
@@ -12,4 +12,3 @@ set_pandoc_version(x)
 \description{
 Set the version version pandoc.
 }
-
