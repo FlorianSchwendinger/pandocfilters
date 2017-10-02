@@ -1,5 +1,8 @@
+if(interactive()) library(testthat)
 context("inline")
 
+
+context(" - Str")
 test_that("Str", {
 
     ## Test Str with Header
@@ -17,6 +20,7 @@ test_that("Str", {
 } )
 
 
+context(" - Emph")
 test_that("Emph", {
 
     ## Test Emph with Header
@@ -38,6 +42,7 @@ test_that("Emph", {
 } )
 
 
+context(" - Strong")
 test_that("Strong", {
 
     ## Test Strong with Header
@@ -60,6 +65,7 @@ test_that("Strong", {
 
 
 
+context(" - Strikeout")
 test_that("Strikeout", {
 
     ## Test Strikeout with Header
@@ -81,6 +87,7 @@ test_that("Strikeout", {
 } )
 
 
+context(" - Superscript")
 test_that("Superscript", {
 
     ## Test Superscript with Header
@@ -102,6 +109,7 @@ test_that("Superscript", {
 } )
 
 
+context(" - Subscript")
 test_that("Subscript", {
 
     ## Test Subscript with Header
@@ -123,6 +131,7 @@ test_that("Subscript", {
 } )
 
 
+context(" - SmallCaps")
 test_that("SmallCaps", {
 
     ## Test SmallCaps with Header
@@ -144,6 +153,7 @@ test_that("SmallCaps", {
 } )
 
 
+context(" - Quoted")
 test_that("Quoted", {
 
     ## Test Quoted with Header
@@ -165,6 +175,7 @@ test_that("Quoted", {
 } )
 
 
+context(" - Cite")
 test_that("Cite", {
 
     ci <- Citation(suffix=list(Str("Suffix_1")),
@@ -205,6 +216,7 @@ test_that("Cite", {
 } )
 
 
+context(" - Str")
 test_that("Str", {
 
     y <- c("`lm(hello ~ world)`{#my_r_inline_code .R startFrom=\"0\"}",  
@@ -229,6 +241,7 @@ test_that("Str", {
 } )
 
 
+context(" - Space")
 test_that("Space", {
 
     y <- "<h1> </h1>"
@@ -252,6 +265,7 @@ test_that("Space", {
 } )
 
 
+context(" - SoftBreak")
 test_that("SoftBreak", {
 
     if ( pandocfilters:::get_pandoc_version() > 1.15 ) {
@@ -279,6 +293,7 @@ test_that("SoftBreak", {
 } )
 
 
+context(" - LineBreak")
 test_that("LineBreak", {
 
     ## FIX an api difference between pandoc 1.16 and lower
@@ -305,6 +320,7 @@ test_that("LineBreak", {
 } )
 
 
+context(" - Math")
 test_that("Math", {
 
     inline <- Math("e^x")

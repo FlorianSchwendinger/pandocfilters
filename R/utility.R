@@ -21,7 +21,7 @@ pandoc_from_json <- function(json, to) {
   tf <- tempfile(fileext = ".txt")
   writeLines(json, tf)
   on.exit(unlink(tf))
-  args <- sprintf("%s -f json -t %s", tf, to)
+  args <- sprintf("%s -s --from=json --to=%s", tf, to)
   system2("pandoc", args, stdout=TRUE, stderr=TRUE)
 }
 
@@ -41,12 +41,34 @@ pandocfilters_writer <- function(x, con, format) {
   writeLines(x, con=con)
 }
 
-test <- function(x, to="html") {
-  d <- list(list(unMeta=nlist()), x)
-  pandoc_from_json(as.character(jsonlite::toJSON(d, auto_unbox=TRUE)), to=to)
+# test <- function(x, to="html") {
+#   d <- list(list(unMeta=nlist()), x)
+#   pandoc_from_json(as.character(jsonlite::toJSON(d, auto_unbox=TRUE)), to=to)
+# }
+
+to_pandoc_json <- function(x){
+  z <- list(
+    blocks = x,
+    `pandoc-api-version` = c(1, 17, 0),
+    meta = nlist()
+  )
+  jsonlite::toJSON(z, auto_unbox = TRUE)
 }
 
-pdf_test <- function(x, to = "markdown") test(x, to)
+
+test <- function(x, to="html") {
+  d <- to_pandoc_json(x)
+  z <- pandoc_from_json(d, to=to)
+  body_start <- grep("^<body>$", z)
+  body_end   <- grep("^</body>$", z)
+  paste(
+    z[(body_start + 1) : (body_end - 1)],
+    collapse = "\n"
+  )
+}
+
+
+pandoc_test <- function(x, to = "html") test(x, to)
 
 detect_pandoc_version <- function() {
   x <- sys_call("pandoc", "--version")
