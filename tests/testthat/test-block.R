@@ -53,7 +53,7 @@ test_that("BlockQuote", {
   
   block <- BlockQuote(list(Plain(list(Str("Hello R!")))))
   
-  y <- c("<blockquote>", "Hello R!", "</blockquote>")
+  y <- collapse_newline("<blockquote>", "Hello R!", "</blockquote>")
   
   ## Test Str with BlockQuote
   x <- pandocfilters:::test(list(block))
@@ -65,7 +65,7 @@ test_that("BlockQuote", {
 context(" - OrderedList")
 test_that("OrderedList", {
   
-  y <- c("<ol>", "<li>A</li>", "<li>B</li>", "<li>C</li>", "</ol>")
+  y <- collapse_newline("<ol>", "<li>A</li>", "<li>B</li>", "<li>C</li>", "</ol>")
   
   ordered_1 <- Plain("A")
   ordered_2 <- list(Plain(Str("B")))
@@ -81,7 +81,7 @@ test_that("OrderedList", {
 context(" - BulletList")
 test_that("BulletList", {
   
-  y <- c("<ul>", "<li>A</li>", "<li>B</li>", "<li>C</li>", "</ul>")
+  y <- collapse_newline("<ul>", "<li>A</li>", "<li>B</li>", "<li>C</li>", "</ul>")
   
   bullet_1 <- list(Plain(list(Str("A"))))
   bullet_2 <- list(Plain(list(Str("B"))))
@@ -97,7 +97,7 @@ test_that("BulletList", {
 context(" - DefinitionList")
 test_that("DefinitionList", {
   
-  y <- c("<dl>", "<dt>key</dt>", "<dd>value", "</dd>", "<dt>key</dt>",  
+  y <- collapse_newline("<dl>", "<dt>key</dt>", "<dd>value", "</dd>", "<dt>key</dt>",  
          "<dd>value", "</dd>", "</dl>")
   
   key <- list(Str("key"))
@@ -142,7 +142,7 @@ test_that("Table", {
   T <- Table(M, col_names=c("A", "B"))
   
   x <- pandocfilters:::test(list(T), "markdown")
-  y <- c("  A   B", "  --- ---", "  1   3", "  2   4", "", "")
+  y <- c("  A   B", "  --- ---", "  1   3", "  2   4")
   expect_equal(x, y)
   
 } )
@@ -156,7 +156,7 @@ test_that("Div", {
   
   ## Test Div
   x <- pandocfilters:::test(list(block))
-  y <- c("<div>", "Hello R!", "</div>")
+  y <- collapse_newline("<div>", "Hello R!", "</div>")
   expect_equal(x, y)
   
 } )
@@ -174,12 +174,17 @@ test_that("Null", {
 } )
 
 
+context(" - Block Combine")
 test_that("Block Combine", {
   
   ## Test Str with Plain
   x <- Header("Hello")
   y <- Plain("R")
   z <- Plain("!")
-  expect_that(pandocfilters:::test(c(x, y, z)), equals(c("<h1>Hello</h1>", "R", "!")))
+  expect_equal(
+    pandocfilters:::test(c(x, y, z)), 
+    collapse_newline("<h1>Hello</h1>", "R", "!")
+  )
+  
   
 } )

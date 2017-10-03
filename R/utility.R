@@ -17,7 +17,7 @@ pandoc_to_json <- function(file, from="markdown") {
   system2("pandoc", args, stdout=TRUE, stderr=TRUE)
 }
 
-pandoc_from_json <- function(json, to) {
+pandoc_from_json <- function(json, to="markdown") {
   tf <- tempfile(fileext = ".txt")
   writeLines(json, tf)
   on.exit(unlink(tf))
@@ -47,23 +47,41 @@ pandocfilters_writer <- function(x, con, format) {
 # }
 
 to_pandoc_json <- function(x){
-  z <- list(
-    blocks = x,
-    `pandoc-api-version` = c(1, 17, 0),
-    meta = nlist()
+  z <- switch(
+    get_pandoc_version(),
+    "1.16" = list(list(unMeta=nlist()), x),
+    "1.17" = list(
+      blocks = x,
+      `pandoc-api-version` = c(1, 17, 0),
+      meta = nlist()
+    )
   )
   jsonlite::toJSON(z, auto_unbox = TRUE)
 }
 
 
+collapse_newline <- function(...)paste(..., sep = "\n", collapse = "\n")
+
 test <- function(x, to="html") {
   d <- to_pandoc_json(x)
   z <- pandoc_from_json(d, to=to)
-  body_start <- grep("^<body>$", z)
-  body_end   <- grep("^</body>$", z)
-  paste(
-    z[(body_start + 1) : (body_end - 1)],
-    collapse = "\n"
+  switch(
+    to, 
+    html = {
+      body_start <- grep("^<body>$", z)
+      body_end   <- grep("^</body>$", z)
+      collapse_newline(
+        z[(body_start + 1) : (body_end - 1)]
+      )
+    },
+    latex = {
+      doc_start <- grep("^\\\\begin\\{document\\}$", z)
+      doc_end   <- grep("^\\\\end\\{document\\}$", z)
+      collapse_newline(
+        z[(doc_start + 1) : (doc_end - 1)]
+      )
+    },
+    z
   )
 }
 

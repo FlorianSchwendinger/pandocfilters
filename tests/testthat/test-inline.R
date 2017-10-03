@@ -254,13 +254,12 @@ test_that("Space", {
     x <- pandocfilters:::test(list(Header(inline)))
     expect_equal(x, y)
 
-    y <- " "
     ## Test Space with Plain
     x <- pandocfilters:::test(list(Plain(list(inline))))
-    expect_equal(x, y)
+    expect_equal(x, " ")
 
     x <- pandocfilters:::test(list(Plain(inline)))
-    expect_equal(x, y)
+    expect_equal(x, " ")
 
 } )
 
@@ -280,13 +279,12 @@ test_that("SoftBreak", {
         x <- pandocfilters:::test(list(Header(inline)))
         expect_equal(x, y)
 
-        y <- " "
         ## Test SoftBreak with Plain
         x <- pandocfilters:::test(list(Plain(list(inline))))
-        expect_equal(x, y)
+        expect_equal(x, " ")
 
         x <- pandocfilters:::test(list(Plain(inline)))
-        expect_equal(x, y)
+        expect_equal(x, " ")
 
     }
 
@@ -299,7 +297,7 @@ test_that("LineBreak", {
     ## FIX an api difference between pandoc 1.16 and lower
     j <- function(...) paste(..., collapse="")
     
-    y <- j(c("<h1><br />", "</h1>"))
+    y <- collapse_newline(c("<h1><br />", "</h1>"))
     inline <- LineBreak()
 
     ## Test LineBreak with Header
@@ -324,7 +322,7 @@ context(" - Math")
 test_that("Math", {
 
     inline <- Math("e^x")
-    y <- if ( get_pandoc_version() < 1.16 ) "$e^x$" else "\\(e^x\\)"
+    y <- if ( get_pandoc_version() < 1.16 ) "$e^x$" else "\n\\(e^x\\)\n"
 
     ## Test Math with Plain
     x <- pandocfilters:::test(list(Plain(list(inline))), "latex")
@@ -336,6 +334,7 @@ test_that("Math", {
 } )
 
 
+context(" - RawInline")
 test_that("RawInline", {
 
     y <- c("some RawInline", "==============")
@@ -358,6 +357,7 @@ test_that("RawInline", {
 } )
 
 
+context(" - Link")
 test_that("Link", {
 
     y <- "<h1><a href=\"https://cran.r-project.org/\" title=\"some title\">Text_Shown</a></h1>"
@@ -381,6 +381,7 @@ test_that("Link", {
 } )
 
 
+context(" - Image")
 test_that("Image", {
 
     y <- "<h1><img src=\"https:://Rlogo.jpg\" title=\"fig:some_caption\" alt=\"some_text\" /></h1>"
@@ -404,11 +405,12 @@ test_that("Image", {
 } )
 
 
+context(" - Note")
 test_that("Note", {
 
     block <- Plain(list(Str("x")))
     inline <- Note(block)
-    y <- c("<h1><a href=\"#fn1\" class=\"footnoteRef\" id=\"fnref1\"><sup>1</sup></a></h1>",
+    y <- collapse_newline("<h1><a href=\"#fn1\" class=\"footnoteRef\" id=\"fnref1\"><sup>1</sup></a></h1>",
            "<div class=\"footnotes\">", "<hr />", "<ol>",
            "<li id=\"fn1\">x<a href=\"#fnref1\">↩</a></li>", "</ol>", "</div>")
 
@@ -418,7 +420,7 @@ test_that("Note", {
     x <- pandocfilters:::test(list(Header(Note(block))))
     expect_equal(x, y)
 
-    y <- c("<a href=\"#fn1\" class=\"footnoteRef\" id=\"fnref1\"><sup>1</sup></a>", 
+    y <- collapse_newline("<a href=\"#fn1\" class=\"footnoteRef\" id=\"fnref1\"><sup>1</sup></a>", 
            "<div class=\"footnotes\">", "<hr />", "<ol>", 
            "<li id=\"fn1\">x<a href=\"#fnref1\">↩</a></li>", "</ol>", "</div>")
     ## Test Str with Plain
@@ -431,6 +433,7 @@ test_that("Note", {
 
 
 
+context(" - Span")
 test_that("Span", {
 
     attr <- Attr("A", c("B"), list(c("C", "D")))
