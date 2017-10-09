@@ -378,7 +378,7 @@ RawInline <- function(format, x) {
 ## <A HREF="url.html" TITLE="some_alterinative_text">the_text_shown</A>
 ## Link Attr [Inline] Target | Hyperlink: "alt text" (list of inlines), target
 Link <- function(target, text, title="", attr=Attr()) {
-  if ( get_pandoc_version() < 1.16 ) {
+  if ( get_pandoc_version() < "1.16" ) {
     return( structure(list(t="Link", c=list(as.loio(text), 
                                             list(target, title))), 
                       class=c("inline", "list")) )
@@ -408,7 +408,7 @@ Link <- function(target, text, title="", attr=Attr()) {
 #' @export
 ## Image Attr [Inline] Target | Image: alt text (list of inlines), target
 Image <- function(target, text, caption="", attr=Attr()) {
-  if ( get_pandoc_version() < 1.16 ) {
+  if ( get_pandoc_version() < "1.16" ) {
     return(
       structure(
         list(t="Image", 

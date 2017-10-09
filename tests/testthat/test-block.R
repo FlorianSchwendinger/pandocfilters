@@ -31,20 +31,22 @@ test_that("CodeBlock", {
   code <- "x <- 3\nprint('Hello R!')"
   block <- CodeBlock(attr, code)
   
-  y <- paste(
-    "<pre id=\"id\" class=\"Programming Language\" key=\"value\"><code>x &lt;- 3",
-    "print(&#39;Hello R!&#39;)</code></pre>",
-    collapse = "\n"
-  )
+  y <- if(get_pandoc_version() < "2.0"){
+    collapse_newline(
+      '<pre id="id" class="Programming Language" key="value"><code>x &lt;- 3',
+      'print(&#39;Hello R!&#39;)</code></pre>'
+    )
+  } else {
+    collapse_newline(
+      '<pre id="id" class="Programming Language" data-key="value"><code>x &lt;- 3',
+      'print(&#39;Hello R!&#39;)</code></pre>'
+    )
+  }
   
   ## Test Str with CodeBlock
   x <- pandocfilters:::test(list(block))
-  # expect_equal(x, y)
-  expect_match(x, "\\<code\\>")
-  expect_match(x, "\\<\\code\\>")
-  expect_match(x, "x &lt;- 3")
-  expect_match(x, "Hello R!")
-  
+  expect_equal(x, y)
+
 } )
 
 
@@ -142,7 +144,11 @@ test_that("Table", {
   T <- Table(M, col_names=c("A", "B"))
   
   x <- pandocfilters:::test(list(T), "markdown")
-  y <- c("  A   B", "  --- ---", "  1   3", "  2   4")
+  y <- if(get_pandoc_version() < "2.0"){
+    collapse_newline("  A   B", "  --- ---", "  1   3", "  2   4", "", "")
+  } else {
+    collapse_newline("  A   B", "  --- ---", "  1   3", "  2   4")
+  }
   expect_equal(x, y)
   
 } )

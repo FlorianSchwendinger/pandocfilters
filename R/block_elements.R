@@ -38,7 +38,7 @@ Plain <- function(x) {
 
 #' Paragraph.
 #' 
-#' A constructor of a block object of type \code{"Para"}.
+#' A constructor of a block object of type `"Para"`.
 #' 
 #' @param x a inline object or list of inline objects
 #' @examples
@@ -53,7 +53,7 @@ Para <- function(x) {
 
 #' Code Block.
 #' 
-#' A constructor of a block object of type \code{"CodeBlock"}.
+#' A constructor of a block object of type `"CodeBlock"`.
 #' 
 #' @param attr an object of type \code{"Attr"}
 #' @param code a character string containing the source code.

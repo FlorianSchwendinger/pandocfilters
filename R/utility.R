@@ -19,9 +19,9 @@ pandoc_to_json <- function(file, from="markdown") {
 
 pandoc_from_json <- function(json, to="markdown") {
   tf <- tempfile(fileext = ".txt")
-  writeLines(json, tf)
+  writeLines(json, tf, useBytes = TRUE)
   on.exit(unlink(tf))
-  args <- sprintf("%s -s --from=json --to=%s", tf, to)
+  args <- sprintf("%s --from=json --to=%s", tf, to)
   system2("pandoc", args, stdout=TRUE, stderr=TRUE)
 }
 
@@ -36,26 +36,22 @@ pandoc_from_json <- function(json, to="markdown") {
 #' @details If you want to apply a filter to the document before it get's written out, or your pandoc installation is not registered in the `PATH` it can be favorable to provide your own writer function to the document class.
 #' @export
 pandocfilters_writer <- function(x, con, format) {
-  args <- sprintf("%s | pandoc -f json -t %s", shQuote(as.character(x)), format)
-  x <- system2("echo", args, stdout=TRUE, stderr=TRUE)
+  args <- sprintf("%s -f json -t %s", shQuote(as.character(x)), format)
+  x <- system2("pandoc", args, stdout=TRUE, stderr=TRUE)
   writeLines(x, con=con)
 }
 
-# test <- function(x, to="html") {
-#   d <- list(list(unMeta=nlist()), x)
-#   pandoc_from_json(as.character(jsonlite::toJSON(d, auto_unbox=TRUE)), to=to)
-# }
 
 to_pandoc_json <- function(x){
-  z <- switch(
-    get_pandoc_version(),
-    "1.16" = list(list(unMeta=nlist()), x),
-    "1.17" = list(
+  z <- if(get_pandoc_version() < "1.18"){
+    list(list(unMeta=nlist()), x)
+  } else {
+    list(
       blocks = x,
       `pandoc-api-version` = c(1, 17, 0),
       meta = nlist()
     )
-  )
+  }
   jsonlite::toJSON(z, auto_unbox = TRUE)
 }
 
@@ -65,24 +61,7 @@ collapse_newline <- function(...)paste(..., sep = "\n", collapse = "\n")
 test <- function(x, to="html") {
   d <- to_pandoc_json(x)
   z <- pandoc_from_json(d, to=to)
-  switch(
-    to, 
-    html = {
-      body_start <- grep("^<body>$", z)
-      body_end   <- grep("^</body>$", z)
-      collapse_newline(
-        z[(body_start + 1) : (body_end - 1)]
-      )
-    },
-    latex = {
-      doc_start <- grep("^\\\\begin\\{document\\}$", z)
-      doc_end   <- grep("^\\\\end\\{document\\}$", z)
-      collapse_newline(
-        z[(doc_start + 1) : (doc_end - 1)]
-      )
-    },
-    z
-  )
+  collapse_newline(z)
 }
 
 
@@ -91,15 +70,19 @@ pandoc_test <- function(x, to = "html") test(x, to)
 detect_pandoc_version <- function() {
   x <- sys_call("pandoc", "--version")
   if ( is.null(x) ) {
-    writeLines("\n\nInfo message:\nCouldn't find 'pandoc'!\nPandoc version is set to '1.16', use `set_pandoc_version` to change the settings if necessary.\n\n")
-    return(NULL)
+    packageStartupMessage(
+      "Info message:"
+    )
+    packageStartupMessage(
+      "Couldn't find 'pandoc'!  Pandoc version is set to '1.16'"
+    )
+    packageStartupMessage(
+      "Use `set_pandoc_version()` to change the settings if necessary."
+    )
+    numeric_version("1.6")
   }
-  b <- grepl("pandoc +\\d\\.\\d", x)  
-  if ( !any(b) ) return(NULL)
-  x <- x[b][1]
-  version <- gsub("[[:alpha:] ]", "", x)
-  version_numeric <- as.numeric(regmatches(version, regexpr("\\d+\\.\\d+", version)))
-  list(char=version, num=version_numeric)
+  version <- strsplit(x[[1]], " ")[[1]][[2]]
+  numeric_version(version)
 }
 ## detect_pandoc_version()
 
