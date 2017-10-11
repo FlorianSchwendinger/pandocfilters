@@ -227,20 +227,26 @@ test_that("Cite", {
   x <- pandocfilters:::test(list(Header(list(cite))), to="markdown")
   expect_equal(
     x, 
-    collapse_newline("@Citation_ID_1 [Suffix\\_1]", "==========================")
+    collapse_newline(
+      "@Citation_ID_1 [Suffix\\_1]", 
+      "==========================")
   )
   
   cite <- Cite(ci, Str("some text"))
   x <- pandocfilters:::test(list(Header(list(cite))), to="markdown")
   expect_equal(
     x, 
-    collapse_newline("@Citation_ID_1 [Suffix\\_1]", "==========================")
+    collapse_newline(
+      "@Citation_ID_1 [Suffix\\_1]", 
+      "==========================")
   )
   
   x <- pandocfilters:::test(list(Header(cite)), to="markdown")
   expect_equal(
     x, 
-    collapse_newline("@Citation_ID_1 [Suffix\\_1]", "==========================")
+    collapse_newline(
+      "@Citation_ID_1 [Suffix\\_1]",
+      "==========================")
   )
   
   ## Test Cite with Plain

@@ -12,50 +12,88 @@ A constructor of an object of type \code{"document"}.
 \details{
 Each document has the following methods:
 \itemize{
-\item[] \code{to_json()}
+\item `to_json()
 \itemize{
-\item[] \emph{Description}
-\item[] \itemize{ Returns the \code{JSON} representation of the document. } }
-\item[] \code{write(con, format="markdown", writer=pandocfilters_writer)}
+\item Description
 \itemize{
-\item[] \emph{Description}
-\item[] \itemize{\item[] Write the JSON-formatted AST to a connection.}
-\item[] \emph{Arguments}
-\item[] \itemize{\item[] \code{con}    \sspace a connection object or a character string to which the document is written  }
-\item[] \itemize{\item[] \code{format} \sspace a character string giving the format (e.g. \code{"latex"}, \code{"html"})  }
-\item[] \itemize{\item[] \code{writer} \sspace an optional writer function, see \link{pandocfilters_writer} }
-\item[] \emph{Note}
-\item[] \itemize{\item[] Any function with the three arguments \code{x}, \code{con} and \code{format} can be used as writer function.}
+\item Returns the \code{JSON} representation of the document.
 }
-\item[] \code{append(x)}
+}
+\item \code{write(con, format="markdown", writer=pandocfilters_writer)}
 \itemize{
-\item[] \emph{Description}
-\item[] \itemize{\item[] Append a new block to the document.}
-\item[] \emph{Arguments}
-\item[] \itemize{\item[] \code{x} \sspace a block object or list of block objects} }
-\item[] \code{append_plain(x)} \sspace
-\itemize{ \item[] For more information about the arguments see \link{Plain}. }
-\item[] \code{append_para(x)} \sspace
-\itemize{ \item[] For more information about the arguments see \link{Para}.}
-\item[] \code{append_code_block(attr, code)} \sspace
-\itemize{ \item[] For more information about the arguments see \link{CodeBlock}.}
-\item[] \code{append_block_quote(blocks)} \sspace
-\itemize{ \item[] For more information about the arguments see \link{BlockQuote}.}
-\item[] \code{append_ordered_list(lattr, lblocks)} \sspace
-\itemize{ \item[] For more information about the arguments see \link{OrderedList}.}
-\item[] \code{append_bullet_list(lblocks)} \sspace
-\itemize{ \item[] For more information about the arguments see \link{BulletList}.}
-\item[] \code{append_definition_list(x)} \sspace
-\itemize{ \item[] For more information about the arguments see \link{DefinitionList}.}
-\item[] \code{append_header(x, level=1L, attr=Attr())} \sspace
-\itemize{ \item[] For more information about the arguments see \link{Header}.}
-\item[] \code{append_horizontal_rule()} \sspace
-\itemize{ \item[] For more information about the arguments see \link{HorizontalRule}.}
-\item[] \code{append_table(rows, col_names=NULL, aligns=NULL, col_width=NULL, caption=list())} \sspace
-\itemize{ \item[] For more information about the arguments see \link{Table}.}
-\item[] \code{append_div(blocks, attr)} \sspace
-\itemize{ \item[] For more information about the arguments see \link{Div}.}
-\item[] \code{append_null()} \sspace
-\itemize{ \item[] For more information about the arguments see \link{Null}.}
+\item Description
+\itemize{
+\item Write the JSON-formatted AST to a connection.
+}
+\item Arguments
+\itemize{
+\item \code{con} : a connection object or a character string to which the document is written
+\item \code{format} : a character string giving the format (e.g. \code{"latex"}, \code{"html"})
+\item \code{writer} : an optional writer function, see \link{pandocfilters_writer}
+}
+\item Note
+\itemize{
+\item Any function with the three arguments \code{x}, \code{con} and \code{format} can be used as writer function.
+}
+}
+\item \code{append(x)}
+\itemize{
+\item Description
+\itemize{
+\item Append a new block to the document.
+}
+\item Arguments
+\itemize{
+\item \code{x} : a block object or list of block objects
+}
+}
+\item \code{append_plain(x)}
+\itemize{
+\item see \link{Plain}
+}
+\item \code{append_para(x)}
+\itemize{
+\item see \link{Para}
+}
+\item \code{append_code_block(attr, code)}
+\itemize{
+\item see \link{CodeBlock}
+}
+\item \code{append_block_quote(blocks)}
+\itemize{
+\item see \link{BlockQuote}
+}
+\item \code{append_ordered_list(lattr, lblocks)}
+\itemize{
+\item see \link{OrderedList}
+}
+\item \code{append_bullet_list(lblocks)}
+\itemize{
+\item see \link{BulletList}
+}
+\item \code{append_definition_list(x)}
+\itemize{
+\item see \link{DefinitionList}
+}
+\item \code{append_header(x, level=1L, attr=Attr())}
+\itemize{
+\item see \link{Header}
+}
+\item \code{append_horizontal_rule()}
+\itemize{
+\item see \link{HorizontalRule}
+}
+\item \code{append_table(rows, col_names=NULL, aligns=NULL, col_width=NULL, caption=list())}
+\itemize{
+\item see \link{Table}
+}
+\item \code{append_div(blocks, attr)}
+\itemize{
+\item see \link{Div}
+}
+\item \code{append_null()}
+\itemize{
+\item see \link{Null}
+}
 }
 }

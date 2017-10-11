@@ -12,11 +12,24 @@ sys_call <- function(cmd, args) {
   tryCatch(system2(cmd, args, stdout=TRUE, stderr=TRUE), error=function(e) NULL)
 }
 
+
+#' Utility functions for testing filters.
+#' 
+#' @param file file name
+#' @param from markdown, html, latex or native
+#' @param json json formatted text
+#' @param to markdown, html, latex or native
+#' 
+#' @rdname utility_functions
+#' 
+#' @export
 pandoc_to_json <- function(file, from="markdown") {
   args <- sprintf("-f %s -t json %s", from, file)
   system2("pandoc", args, stdout=TRUE, stderr=TRUE)
 }
 
+#' @rdname utility_functions
+#' @export
 pandoc_from_json <- function(json, to="markdown") {
   tf <- tempfile(fileext = ".txt")
   writeLines(json, tf, useBytes = TRUE)
@@ -42,14 +55,14 @@ pandocfilters_writer <- function(x, con, format) {
 }
 
 
-to_pandoc_json <- function(x){
+to_pandoc_json <- function(x, meta = nlist()){
   z <- if(get_pandoc_version() < "1.18"){
-    list(list(unMeta=nlist()), x)
+    list(list(unMeta = meta), x)
   } else {
     list(
       blocks = x,
       `pandoc-api-version` = c(1, 17, 0),
-      meta = nlist()
+      meta = meta
     )
   }
   jsonlite::toJSON(z, auto_unbox = TRUE)

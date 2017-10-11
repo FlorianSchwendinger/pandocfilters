@@ -1,0 +1,135 @@
+---
+title: "Creating a new document using pandocfilters"
+author: "Florian Schwendinger and Andrie de Vries"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating a new document using pandocfilters}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+The constructor functions in the **pandocfilters** package can also be used to create a new document by reproducing the AST. To show how this is done we use the first paragraph of chapter 2.1 from the [R-FAQ](https://cran.r-project.org/doc/FAQ/R-FAQ.txt)  and apply different inline elements. The output is saved as HTML file. 
+
+In general, a **pandocfilters** document is a list of two elements:     
+
+* Metadata
+* Content
+   
+The content is composed of lists of blocks, where each block itself usually  consists of a list of inline elements. 
+
+**NOTE:**
+
+*If an inline object is needed and a character vector is given, **pandocfilters** automatically transforms the character string to an 'inline' object of type 'Str'.*
+    
+```{r initialize}
+require("pandocfilters", quietly = TRUE, warn.conflicts = FALSE)
+```
+
+
+
+```{r}
+# Create a new document.
+doc <- document()
+
+# Create a non-standard writer function so we can look at the document while writing it.
+cat_writer <- function(x, con = stdout(), format = "json") {
+  x <- pandoc_from_json(x, to = format)
+  cat(paste(x, collapse = "\n"))
+}
+
+# Append a Header and look at the document
+args(doc$append_header)
+```
+
+
+```{r}
+doc$append_header( "R Basics" )
+doc$write(format="html", writer=cat_writer)
+```
+
+
+```{r}
+# Append a level 2 Header
+doc$append_header( "What is R?", level=2)
+
+# Append Plain text with inline formating
+x <- c(Emph("R"), Space(), "is a system for ")
+x <- c(x, c(Strong("statistical computation"), Space(), Strikeout("and"), Space() ))
+x <- c(x, c(Superscript("graphics"), ". ", LineBreak(), Subscript("It"), Space()))
+x <- c(x, c(SmallCaps("consists"), Space(), Quoted("of", quote_type="SingleQuote")))
+x <- c(x, c(Space(), Quoted("a", quote_type="DoubleQuote"), Space()))
+x <- c(x, c(RawInline("html", "<i>language</i>"), " plus a run-time environment with"))
+x <- c(x, c(" graphics, a debugger, access to ", "certain system functions,"))
+x <- c(x, c(" and the ability to run programs stored in script files."))
+
+doc$append_plain( x )
+doc$write(format="html", writer=cat_writer)
+```
+
+If we look at the output we see that in "test_1.html" the quotes don't look very nice.
+
+This can be fixed by using the function `astrapply`. In most cases it is best to look at the AST via `str` to see what should be replaced. Since the quote doesn't look good in the HTML case we replace it with `<q>text</q>`.
+
+
+```{r}
+fix_quotes_fun <- function(x) RawInline("html", sprintf("<q>%s</q>", x$c))
+
+fix_quotes <- function(type, content, ...) {
+    if (type == "Quoted") {       
+        return( lapply(content[[-1]], fix_quotes_fun) )
+    }
+}
+
+doc$doc <- astrapply(doc$doc, FUN=fix_quotes)
+doc$write(format="html", writer=cat_writer)
+```
+
+# Create a Table
+
+
+
+```{r}
+table <- document()
+table$append_table(cars[1:4,])
+table$write(format="markdown", writer=cat_writer)
+```
+
+
+```{r}
+table$write(format="html", writer=cat_writer)
+```
+
+
+```{r}
+table$write(format="html5", writer=cat_writer)
+```
+
+
+```{r}
+table$write(format="org", writer=cat_writer)
+```
+
+
+```{r}
+table$write(format="latex", writer=cat_writer)
+```
+
+
+```{r}
+table$write(format="rst", writer=cat_writer)
+```
+
+
+```{r}
+table$write(format="asciidoc", writer=cat_writer)
+```
+
