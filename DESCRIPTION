@@ -22,7 +22,10 @@ Depends:
     R (>= 2.15)
 Imports:
     jsonlite, base
+Suggests:
+    rmarkdown
 SystemRequirements: pandoc (> 1.12)
 License: GPL-3
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: rmarkdown

@@ -2,8 +2,9 @@ devel
 tests
 inst/examples__
 inst/testing
-inst/doc
 Makefile
 README.pdf
 ^.*\.Rproj$
 ^\.Rproj\.user$
+inst/doc/Makefile
+inst/doc/README.*

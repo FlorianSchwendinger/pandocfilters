@@ -43,7 +43,7 @@ get_pandoc_version()
 ```
 
 
-```{r pandoc_version, eval=FALSE}
+```{r pandoc_version, eval=FALSE} 
 # Set the pandoc version.
 set_pandoc_version(1.16)
 ```
@@ -135,16 +135,14 @@ Emph("some text")
 
 ## Altering the AST
 
-To read, write and test the AST you can use the some utility functions: 
+To read, write and test the AST you can use some utility functions: 
 
 ### Utility Functions
 
 
 ```{r utility_functions, eval=FALSE}
 pandoc_to_json()
-
 pandoc_from_json()
-
 test_filter()
 ```
 
@@ -162,28 +160,28 @@ caps <- function(key, value, ...) {
     return(NULL)
 }
 
-example_1 <- file.path(
+example <- file.path(
   system.file(package = "pandocfilters"), 
   "examples", 
   "lower_case.md"
 )
 
 # the file before transformation
-readLines(example_1)
+readLines(example)
 ```
 
 
 ```{r apply_caps}
 # read connection
-input_connection <- textConnection(pandoc_to_json(example_1, from="markdown"))
+input_connection <- textConnection(pandoc_to_json(example, from = "markdown"))
 # write connection
-output_connection <- textConnection("modified_ast", open="w")
+output_connection <- textConnection("modified_ast", open = "w")
 
 # apply filter
-filter(caps, input=input_connection, output=output_connection)
+filter(caps, input = input_connection, output = output_connection)
 
 # convert altered ast to markdown
-pandoc_from_json(modified_ast, to="markdown")
+pandoc_from_json(modified_ast, to = "markdown")
 ```
 
 

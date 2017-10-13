@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Florian Schwendinger and Andrie de Vries" />
+
+<meta name="date" content="2017-10-13" />
+
+<title>Introduction to pandocfilters</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+div.sourceLine, a.sourceLine { display: inline-block; min-height: 1.25em; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; }
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+div.sourceLine, a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+.numberSource div.sourceLine, .numberSource a.sourceLine
+  { position: relative; }
+.numberSource div.sourceLine::before, .numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em; }
+.numberSource pre.sourceCode { margin-left: 3em; border-left: 1px solid #aaaaaa; color: #aaaaaa;  padding-left: 4px; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; color = initial; }
+}
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.bn { color: #40a070; } /* BaseN */
+code span.fl { color: #40a070; } /* Float */
+code span.ch { color: #4070a0; } /* Char */
+code span.st { color: #4070a0; } /* String */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.ot { color: #007020; } /* Other */
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.fu { color: #06287e; } /* Function */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code span.cn { color: #880000; } /* Constant */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.im { } /* Import */
+code span.va { color: #19177c; } /* Variable */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.op { color: #666666; } /* Operator */
+code span.bu { } /* BuiltIn */
+code span.ex { } /* Extension */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.at { color: #7d9029; } /* Attribute */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<style type="text/css">body {background-color: #fff;margin: 1em auto;max-width: 700px;overflow: visible;padding-left: 2em;padding-right: 2em;font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;font-size: 14px;line-height: 1.35;}#header {text-align: center;}#TOC {clear: both;margin: 0 0 10px 10px;padding: 4px;width: 400px;border: 1px solid #CCCCCC;border-radius: 5px;background-color: #f6f6f6;font-size: 13px;line-height: 1.3;}#TOC .toctitle {font-weight: bold;font-size: 15px;margin-left: 5px;}#TOC ul {padding-left: 40px;margin-left: -1.5em;margin-top: 5px;margin-bottom: 5px;}#TOC ul ul {margin-left: -2em;}#TOC li {line-height: 16px;}table {margin: 1em auto;border-width: 1px;border-color: #DDDDDD;border-style: outset;border-collapse: collapse;}table th {border-width: 2px;padding: 5px;border-style: inset;}table td {border-width: 1px;border-style: inset;line-height: 18px;padding: 5px 5px;}table, table th, table td {border-left-style: none;border-right-style: none;}table thead, table tr.even {background-color: #f7f7f7;}p {margin: 0.5em 0;}blockquote {background-color: #f6f6f6;padding: 0.25em 0.75em;}hr {border-style: solid;border: none;border-top: 1px solid #777;margin: 28px 0;}dl {margin-left: 0;}dl dd {margin-bottom: 13px;margin-left: 13px;}dl dt {font-weight: bold;}ul {margin-top: 0;}ul li {list-style: circle outside;}ul ul {margin-bottom: 0;}pre, code {background-color: #f7f7f7;border-radius: 3px;color: #333;white-space: pre-wrap; }pre {border-radius: 3px;margin: 5px 0px 10px 0px;padding: 10px;}pre:not([class]) {background-color: #f7f7f7;}code {font-family: Consolas, Monaco, 'Courier New', monospace;font-size: 85%;}p > code, li > code {padding: 2px 0px;}div.figure {text-align: center;}img {background-color: #FFFFFF;padding: 2px;border: 1px solid #DDDDDD;border-radius: 3px;border: 1px solid #CCCCCC;margin: 0 5px;}h1 {margin-top: 0;font-size: 35px;line-height: 40px;}h2 {border-bottom: 4px solid #f7f7f7;padding-top: 10px;padding-bottom: 2px;font-size: 145%;}h3 {border-bottom: 2px solid #f7f7f7;padding-top: 10px;font-size: 120%;}h4 {border-bottom: 1px solid #f7f7f7;margin-left: 8px;font-size: 105%;}h5, h6 {border-bottom: 1px solid #ccc;font-size: 105%;}a {color: #0033dd;text-decoration: none;}a:hover {color: #6666ff; }a:visited {color: #800080; }a:visited:hover {color: #BB00BB; }a[href^="http:"] {text-decoration: underline; }a[href^="https:"] {text-decoration: underline; }code > span.kw { color: #555; font-weight: bold; } code > span.dt { color: #902000; } code > span.dv { color: #40a070; } code > span.bn { color: #d14; } code > span.fl { color: #d14; } code > span.ch { color: #d14; } code > span.st { color: #d14; } code > span.co { color: #888888; font-style: italic; } code > span.ot { color: #007020; } code > span.al { color: #ff0000; font-weight: bold; } code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } </style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to pandocfilters</h1>
+<h4 class="author"><em>Florian Schwendinger and Andrie de Vries</em></h4>
+<h4 class="date"><em>2017-10-13</em></h4>
+
+
+
+<p>The document converter <a href="http://pandoc.org/">pandoc</a> is widely used in the R community. One feature of pandoc is that it can produce and consume JSON-formatted abstract syntax trees (AST). This allows to transform a given source document into JSON-formatted AST, alter it by so called filters and pass the altered JSON-formatted AST back to pandoc. This package provides functions which allow to write such filters in native R code. The package is inspired by the Python package <a href="https://github.com/jgm/pandocfilters/">pandocfilters</a>.</p>
+<p>To alter the AST, the JSON representations of the data structures building the AST have to be replicated. For this purpose, <strong>pandocfilters</strong> provides a set of constructors, with the goal to ease building / altering the AST.</p>
+<section id="installation" class="level2">
+<h2>Installation</h2>
+<p>You can find information about installing pandoc at <a href="http://pandoc.org/installing.html" class="uri">http://pandoc.org/installing.html</a>.</p>
+<p><strong>NOTE:</strong> <em>There have been API-changes in pandoc 1.16. To account for this changes, <strong>pandocfilters</strong> needs to know the pandoc version. Therefore, <strong>pandocfilters</strong> will try to get the pandoc version at startup. However, it is also possible to get and set the pandoc version via the functions <code>get_pandoc_version()</code> and <code>set_pandoc_version()</code>.</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="kw">require</span>(<span class="st">&quot;pandocfilters&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="co"># Get the pandoc version.</span></div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="kw">get_pandoc_version</span>()</div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co">#&gt; [1] '2.0'</span></div></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="co"># Set the pandoc version.</span></div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="kw">set_pandoc_version</span>(<span class="fl">1.16</span>)</div></code></pre></div>
+</section>
+<section id="constructors" class="level2">
+<h2>Constructors</h2>
+<p>As mentioned before, constructors are used to replicate the pandoc AST in R. For this purpose, pandoc provides two basic types, <strong>inline</strong> elements and <strong>block</strong> elements. An extensive list can be found below.</p>
+<p>To minimize the amount of unnecessary typing <strong>pandocfilters</strong> automatically converts character strings to pandoc objects of type <code>&quot;Str&quot;</code> if needed. Furthermore, if a single inline object is provided where a list of inline objects is needed <strong>pandocfilters</strong> automatically converts this inline object into a list of inline objects.</p>
+<p>For example, the canonical way to emphasize the character string <code>&quot;some text&quot;</code> would be</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="kw">Emph</span>(<span class="kw">list</span>(<span class="kw">Str</span>(<span class="st">&quot;some text&quot;</span>)))</div></code></pre></div>
+<p>Since single inline objects are automatically transformed to lists of inline objects, this is equivalent to</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="kw">Emph</span>(<span class="kw">Str</span>(<span class="st">&quot;some text&quot;</span>))</div></code></pre></div>
+<p>Since a character string is automatically transformed to an inline object, this is equivalent to</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="kw">Emph</span>(<span class="st">&quot;some text&quot;</span>)</div></code></pre></div>
+<p>In short, whenever a list of inline objects is needed one can also use a single inline object or a character string, and therefore the following three code lines are equivalent.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="kw">Emph</span>(<span class="kw">list</span>(<span class="kw">Str</span>(<span class="st">&quot;some text&quot;</span>)))</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="kw">Emph</span>(<span class="kw">Str</span>(<span class="st">&quot;some text&quot;</span>))</div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="kw">Emph</span>(<span class="st">&quot;some text&quot;</span>)</div></code></pre></div>
+<section id="inline-elements" class="level3">
+<h3>Inline Elements</h3>
+<ol type="1">
+<li><code>Str(x)</code></li>
+<li><code>Emph(x)</code></li>
+<li><code>Strong(x)</code></li>
+<li><code>Strikeout(x)</code></li>
+<li><code>Superscript(x)</code></li>
+<li><code>Subscript(x)</code></li>
+<li><code>SmallCaps(x)</code></li>
+<li><code>Quoted(x, quote_type)</code></li>
+<li><code>Cite(citation, x)</code></li>
+<li><code>Code(code, name, language, line_numbers, start_from)</code></li>
+<li><code>Space()</code></li>
+<li><code>SoftBreak()</code></li>
+<li><code>LineBreak()</code></li>
+<li><code>Math(x)</code></li>
+<li><code>RawInline(format, x)</code></li>
+<li><code>Link(target, text, title, attr)</code></li>
+<li><code>Image(target, text, caption, attr)</code></li>
+<li><code>Span(attr, inline)</code></li>
+</ol>
+</section>
+<section id="block-elements" class="level3">
+<h3>Block Elements</h3>
+<ol type="1">
+<li><code>Plain(x)</code></li>
+<li><code>Para(x)</code></li>
+<li><code>CodeBlock(attr, code)</code></li>
+<li><code>BlockQuote(blocks)</code></li>
+<li><code>OrderedList(lattr, lblocks)</code></li>
+<li><code>BulletList(lblocks)</code></li>
+<li><code>DefinitionList(x)</code></li>
+<li><code>Header(x, level, attr)</code></li>
+<li><code>HorizontalRule()</code></li>
+<li><code>Table(rows, col_names, aligns, col_width, caption)</code></li>
+<li><code>Div(blocks, attr)</code></li>
+<li><code>Null()</code></li>
+</ol>
+</section>
+<section id="argument-constructors" class="level3">
+<h3>Argument Constructors</h3>
+<ol type="1">
+<li><code>Attr(identifier, classes, key_val_pairs)</code></li>
+<li><code>Citation(suffix, id, note_num, mode, prefix, hash)</code></li>
+<li><code>TableCell(x)</code></li>
+</ol>
+</section>
+</section>
+<section id="altering-the-ast" class="level2">
+<h2>Altering the AST</h2>
+<p>To read, write and test the AST you can use some utility functions:</p>
+<section id="utility-functions" class="level3">
+<h3>Utility Functions</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="kw">pandoc_to_json</span>()</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="kw">pandoc_from_json</span>()</div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="kw">test_filter</span>()</div></code></pre></div>
+</section>
+</section>
+<section id="examples" class="level2">
+<h2>Examples</h2>
+<section id="lower-case" class="level3">
+<h3>Lower Case</h3>
+<p>The following example shows how to obtain the AST from a markdown file (<code>&quot;lower_case.md&quot;</code>) and convert every object of type <code>Str</code> to lower case.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">caps &lt;-<span class="st"> </span><span class="cf">function</span>(key, value, ...) {</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2">    <span class="cf">if</span> (key <span class="op">==</span><span class="st"> &quot;Str&quot;</span>) <span class="kw">return</span>( <span class="kw">Str</span>( <span class="kw">tolower</span>(value) ) )</div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3">    <span class="kw">return</span>(<span class="ot">NULL</span>)</div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4">}</div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5"></div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6">example &lt;-<span class="st"> </span><span class="kw">file.path</span>(</div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7">  <span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">&quot;pandocfilters&quot;</span>), </div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8">  <span class="st">&quot;examples&quot;</span>, </div>
+<div class="sourceLine" id="9" href="#9" data-line-number="9">  <span class="st">&quot;lower_case.md&quot;</span></div>
+<div class="sourceLine" id="10" href="#10" data-line-number="10">)</div>
+<div class="sourceLine" id="11" href="#11" data-line-number="11"></div>
+<div class="sourceLine" id="12" href="#12" data-line-number="12"><span class="co"># the file before transformation</span></div>
+<div class="sourceLine" id="13" href="#13" data-line-number="13"><span class="kw">readLines</span>(example)</div>
+<div class="sourceLine" id="14" href="#14" data-line-number="14"><span class="co">#&gt; [1] &quot;## 2.1 What is R?&quot;                                                         </span></div>
+<div class="sourceLine" id="15" href="#15" data-line-number="15"><span class="co">#&gt; [2] &quot;&quot;                                                                          </span></div>
+<div class="sourceLine" id="16" href="#16" data-line-number="16"><span class="co">#&gt; [3] &quot;R is a system for statistical computation and graphics.  It consists of a&quot; </span></div>
+<div class="sourceLine" id="17" href="#17" data-line-number="17"><span class="co">#&gt; [4] &quot;language plus a run-time environment with graphics, a debugger, access to&quot; </span></div>
+<div class="sourceLine" id="18" href="#18" data-line-number="18"><span class="co">#&gt; [5] &quot;certain system functions, and the ability to run programs stored in script&quot;</span></div>
+<div class="sourceLine" id="19" href="#19" data-line-number="19"><span class="co">#&gt; [6] &quot;files.&quot;</span></div></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="co"># read connection</span></div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2">input_connection &lt;-<span class="st"> </span><span class="kw">textConnection</span>(<span class="kw">pandoc_to_json</span>(example, <span class="dt">from =</span> <span class="st">&quot;markdown&quot;</span>))</div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="co"># write connection</span></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4">output_connection &lt;-<span class="st"> </span><span class="kw">textConnection</span>(<span class="st">&quot;modified_ast&quot;</span>, <span class="dt">open =</span> <span class="st">&quot;w&quot;</span>)</div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5"></div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6"><span class="co"># apply filter</span></div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7"><span class="kw">filter</span>(caps, <span class="dt">input =</span> input_connection, <span class="dt">output =</span> output_connection)</div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8"></div>
+<div class="sourceLine" id="9" href="#9" data-line-number="9"><span class="co"># convert altered ast to markdown</span></div>
+<div class="sourceLine" id="10" href="#10" data-line-number="10"><span class="kw">pandoc_from_json</span>(modified_ast, <span class="dt">to =</span> <span class="st">&quot;markdown&quot;</span>)</div>
+<div class="sourceLine" id="11" href="#11" data-line-number="11"><span class="co">#&gt; [1] &quot;2.1 what is r?&quot;                                                          </span></div>
+<div class="sourceLine" id="12" href="#12" data-line-number="12"><span class="co">#&gt; [2] &quot;--------------&quot;                                                          </span></div>
+<div class="sourceLine" id="13" href="#13" data-line-number="13"><span class="co">#&gt; [3] &quot;&quot;                                                                        </span></div>
+<div class="sourceLine" id="14" href="#14" data-line-number="14"><span class="co">#&gt; [4] &quot;r is a system for statistical computation and graphics. it consists of a&quot;</span></div>
+<div class="sourceLine" id="15" href="#15" data-line-number="15"><span class="co">#&gt; [5] &quot;language plus a run-time environment with graphics, a debugger, access&quot;  </span></div>
+<div class="sourceLine" id="16" href="#16" data-line-number="16"><span class="co">#&gt; [6] &quot;to certain system functions, and the ability to run programs stored in&quot;  </span></div>
+<div class="sourceLine" id="17" href="#17" data-line-number="17"><span class="co">#&gt; [7] &quot;script files.&quot;</span></div></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="kw">close</span>(input_connection)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="kw">close</span>(output_connection)</div></code></pre></div>
+</section>
+</section>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
