@@ -7,12 +7,12 @@
 CodeBlock(attr, code)
 }
 \arguments{
-\item{attr}{an object of type \code{"Attr"}}
+\item{attr}{an object of type \link{Attr}}
 
 \item{code}{a character string containing the source code.}
 }
 \description{
-A constructor of a block object of type \code{"CodeBlock"}.
+Constructs a block object of type \code{CodeBlock}.
 }
 \examples{
 attr <- Attr("id", "Programming Language", list(c("key", "value")))

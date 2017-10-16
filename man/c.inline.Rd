@@ -10,10 +10,10 @@
 \item{...}{objects to be concatenated.}
 }
 \value{
-an list of \code{"inline"} objects.
+an list of \code{inline} objects.
 }
 \description{
-Objects of class \code{"inline"} can be combined by using the generic default method \link{c} (combine).
+Objects of class \code{inline} can be combined by using the generic default method \link{c} (combine).
 }
 \examples{
 c(Str("some"), Strong("text"))

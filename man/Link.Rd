@@ -13,7 +13,7 @@ Link(target, text, title = "", attr = Attr())
 
 \item{title}{an optional character string giving the title}
 
-\item{attr}{an optional object of type \code{"Attr"}}
+\item{attr}{an optional object of type \link{Attr}}
 }
 \description{
 A constructor of an inline object of type \code{"Link"}.

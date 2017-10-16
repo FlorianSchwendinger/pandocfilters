@@ -12,7 +12,7 @@ Definition(key, value)
 \item{value}{a block object or list of block objects}
 }
 \description{
-A constructor of a \code{Definition} which can be used as an element of a \link{DefinitionList}.
+Constructs a \code{Definition} which can be used as an element of a \link{DefinitionList}.
 }
 \examples{
 Definition("some key", Plain("some value"))

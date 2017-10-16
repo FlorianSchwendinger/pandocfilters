@@ -7,7 +7,7 @@
 HorizontalRule()
 }
 \description{
-A constructor of a block object of type \code{"HorizontalRule"}.
+Constructs a block object of type \code{HorizontalRule}.
 }
 \examples{
 HorizontalRule()

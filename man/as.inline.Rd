@@ -7,13 +7,13 @@
 as.inline(x)
 }
 \arguments{
-\item{x}{an object of type \code{"NULL"}, \code{"character"} or \code{"inline"}.}
+\item{x}{an object of type \code{NULL}, \code{character} or \code{inline}.}
 }
 \value{
-an object of class \code{"inline"}.
+an object of class \code{inline}.
 }
 \description{
-Objects of the classes \code{"NULL"} and \code{"character"} can be coerced to \code{"inline"}.
+Objects of the classes \code{NULL} and \code{character} can be coerced to \code{inline}.
 }
 \examples{
 as.inline("some text")

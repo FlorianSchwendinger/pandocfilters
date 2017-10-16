@@ -10,9 +10,9 @@ ListAttributes(first_number = 1L, style = "DefaultStyle",
 \arguments{
 \item{first_number}{an integer giving the first number of the list}
 
-\item{style}{a character string giving the style, possible values are \code{"DefaultStyle"}, \code{"Example"}, \code{"Decimal"}, \code{"LowerRoman"}, \code{"UpperRoman"}, \code{"LowerAlpha"} and \code{"UpperAlpha"}.}
+\item{style}{a character string giving the style, possible values are \code{DefaultStyle}, \code{Example}, \code{Decimal}, \code{LowerRoman}, \code{UpperRoman}, \code{LowerAlpha} and \code{UpperAlpha}.}
 
-\item{delim}{a character string giving the delimiter, possible values are \code{"DefaultDelim"}, \code{"Period"}, \code{"OneParen"} and \code{"TwoParens"}.}
+\item{delim}{a character string giving the delimiter, possible values are \code{DefaultDelim}, \code{Period}, \code{OneParen} and \code{TwoParens}.}
 }
 \description{
 A constructor for pandoc list attributes.

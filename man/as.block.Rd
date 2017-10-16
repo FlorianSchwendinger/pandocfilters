@@ -7,13 +7,13 @@
 as.block(x)
 }
 \arguments{
-\item{x}{an object of type \code{"NULL"} or \code{"character"} or \code{"block"}.}
+\item{x}{an object of type \code{NULL} or \code{character} or \code{block}.}
 }
 \value{
-an object of class \code{"block"}.
+an object of class \code{block}.
 }
 \description{
-In pandoc \code{"block"} objects are used as container for \code{"inline"} objects and to give them specific roles. Objects of the classes \code{"NULL"} and \code{"character"} can be coerced to \code{"block"}.
+In pandoc \code{block} objects are used as container for \code{inline} objects and to give them specific roles. Objects of the classes \code{NULL} and \code{character} can be coerced to \code{block}.
 }
 \examples{
 as.block("some text")

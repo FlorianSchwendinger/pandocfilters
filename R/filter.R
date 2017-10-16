@@ -3,7 +3,7 @@
 #' Apply a filter on the JSON-formatted abstract syntax tree (AST).
 #' 
 #' @param FUN the function to be applied on the AST.
-#' @param ... optional arguments to \code{FUN}.
+#' @param ... optional arguments to `FUN`.
 #' @param input a connection object or a character string from which the JSON-formatted AST is read
 #' @param output a connection object or a character string to which the JSON-formatted AST is written
 #' 

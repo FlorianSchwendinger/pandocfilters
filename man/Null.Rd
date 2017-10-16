@@ -7,7 +7,7 @@
 Null()
 }
 \description{
-A constructor of a block object of type \code{"Null"}.
+Constructs a block object of type \code{Null}.
 }
 \examples{
 Null()

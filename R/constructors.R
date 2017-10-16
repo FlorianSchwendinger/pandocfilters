@@ -5,10 +5,10 @@
 
 #' Inline Objects.
 #' 
-#' Objects of the classes \code{"NULL"} and \code{"character"} can be coerced to \code{"inline"}.
+#' Objects of the classes `NULL` and `character` can be coerced to `inline`.
 #' 
-#' @param x an object of type \code{"NULL"}, \code{"character"} or \code{"inline"}.
-#' @return an object of class \code{"inline"}.
+#' @param x an object of type `NULL`, `character` or `inline`.
+#' @return an object of class `inline`.
 #' @examples
 #' as.inline("some text")
 #' as.inline(NULL)
@@ -34,14 +34,14 @@ as.inline.NULL <- function( x ) structure(list(), class=c("inline", "list"))
 
 #' Inline Objects
 #' 
-#' Tests if an object has the class attribute \code{"inline"}.
+#' Tests if an object has the class attribute `inline`.
 #' 
 #' @param x an object to be tested.
-#' @return a logical indicating if the provided object is of type \code{"inline"}.
+#' @return a logical indicating if the provided object is of type `inline`.
 #' @examples
 #' is.inline(as.inline(NULL))
 #' @export
-is.inline <- function(x) class(x)[1] == "inline"
+is.inline <- function(x) inherits(x, "inline")
 
 combine_two <- function(x, y) {
   if ( is.null(x) ) return(y)
@@ -60,9 +60,9 @@ combine_two <- function(x, y) {
 
 #' Combine Inline Objects
 #' 
-#' Objects of class `"inline"` can be combined by using the generic default method [c] (combine).
+#' Objects of class `inline` can be combined by using the generic default method [c] (combine).
 #' @param ... objects to be concatenated.
-#' @return an list of \code{"inline"} objects.
+#' @return an list of `inline` objects.
 #' @examples
 #' c(Str("some"), Strong("text"))
 #' @export
@@ -111,10 +111,10 @@ is.loio <- function(x) class(x)[1] == "loio"
 
 #' Block Objects
 #' 
-#' In pandoc \code{"block"} objects are used as container for \code{"inline"} objects and to give them specific roles. Objects of the classes \code{"NULL"} and \code{"character"} can be coerced to \code{"block"}.
+#' In pandoc `block` objects are used as container for `inline` objects and to give them specific roles. Objects of the classes `NULL` and `character` can be coerced to `block`.
 #' 
-#' @param x an object of type \code{"NULL"} or \code{"character"} or \code{"block"}.
-#' @return an object of class \code{"block"}.
+#' @param x an object of type `NULL` or `character` or `block`.
+#' @return an object of class `block`.
 #' @examples
 #' as.block("some text")
 #' as.block(NULL)
@@ -134,10 +134,10 @@ as.block.character <- function(x) Plain(x)
 
 #' Block Objects
 #' 
-#' Tests if an object has the class attribute \code{"block"}.
+#' Tests if an object has the class attribute `block`.
 #' 
 #' @param x an object to be tested.
-#' @return a logical indicating if the provided object is of type \code{"block"}.
+#' @return a logical indicating if the provided object is of type `block`.
 #' @examples
 #' is.block(as.block(NULL))
 #' @export
@@ -160,9 +160,9 @@ combine_two_blocks <- function(x, y) {
 
 #' Combine Block Objects
 #' 
-#' Objects of class \code{"block"} can be combined by using the generic default method \code{"c"} (combine).
+#' Objects of class `block` can be combined by using the generic default method `c` (combine).
 #' @param ... objects to be concatenated.
-#' @return an list of \code{"block"} objects.
+#' @return an list of `block` objects.
 #' @examples
 #' c(Header( "R Basics" ), Header("What is R?", level=2),
 #' Plain(c(Emph("R"), Space(), "is a system for ", Strong("statistical computation"))))
@@ -255,13 +255,12 @@ as.lolobo.list  <- function( x ) {
 ##
 ## param x a character string giving the type
 ## details A convenience function to create the following data structure
-##          \code{list(t=x, c=list())} by only providing x.
+##          `list(t=x, c=list())` by only providing x.
 ## examples
 ## Type("SmallCaps")
 Type <- function(x) {
-  structure(
-    list(t=x, c=list()), 
-    class=c("Type", "list")
-  )
+  z <- list(t = x, c = list())
+  class(z) <- c("Type", "list")
+  z
 }
 

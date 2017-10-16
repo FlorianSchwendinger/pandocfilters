@@ -10,10 +10,10 @@ is.block(x)
 \item{x}{an object to be tested.}
 }
 \value{
-a logical indicating if the provided object is of type \code{"block"}.
+a logical indicating if the provided object is of type \code{block}.
 }
 \description{
-Tests if an object has the class attribute \code{"block"}.
+Tests if an object has the class attribute \code{block}.
 }
 \examples{
 is.block(as.block(NULL))

@@ -9,10 +9,10 @@ Div(blocks, attr = Attr())
 \arguments{
 \item{blocks}{a block object or list of block objects}
 
-\item{attr}{an object of type \code{"Attr"}}
+\item{attr}{an object of type \link{Attr}}
 }
 \description{
-A constructor of a block object of type \code{"Div"}.
+Constructs a block object of type \code{Div}.
 }
 \examples{
 blocks <- Plain("Hello R!")

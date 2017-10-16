@@ -1,10 +1,10 @@
 #' Apply a function on a AST.
 #' 
-#' Apply the function \code{FUN} on the abstract syntax tree (AST) obtained from pandoc.
+#' Apply the function `FUN` on the abstract syntax tree (AST) obtained from pandoc.
 #' 
 #' @param x a list representing the AST obtained from pandoc.
 #' @param FUN the function to be applied to the AST.
-#' @param ... optional arguments to \code{FUN}.
+#' @param ... optional arguments to `FUN`.
 #' 
 #' @return A list containing the modified AST.
 #' 

@@ -8,18 +8,18 @@ Table(rows, col_names = NULL, aligns = NULL, col_width = NULL,
   caption = list())
 }
 \arguments{
-\item{rows}{an object of class \code{"matrix"}, \code{"data.frame"}, \code{"table"} or a list of lists of pandoc objects of type \link{TableCell}}
+\item{rows}{an object of class \code{matrix}, \code{data.frame}, \code{table} or a list of lists of pandoc objects of type \link{TableCell}}
 
 \item{col_names}{a list of objects of type \link{TableCell}}
 
-\item{aligns}{a character vector of alignments, possible values are \code{"l"} for left, \code{"r"} for right, \code{"c"} for center and \code{"d"} for default.}
+\item{aligns}{a character vector of alignments, possible values are \code{l} (left), \code{r} (right), \code{c} (center) and \code{d} (default).}
 
 \item{col_width}{a numeric vector}
 
 \item{caption}{a inline object or a list of inline objects giving the caption}
 }
 \description{
-A constructor of a block object of type \code{"Table"}.
+Constructs a block object of type \code{Table}.
 }
 \details{
 Table, with caption, column alignments (required), relative column widths (0 = default), column headers (each a list of blocks), and rows (each a list of lists of blocks)

@@ -7,13 +7,13 @@
 DefinitionList(x)
 }
 \arguments{
-\item{x}{a list of key value pairs, the key is a list of \code{"inline"} objects and the values are a list of lists of objects of type \code{"block"}.}
+\item{x}{a list of key value pairs, the key is a list of \code{inline} objects and the values are a list of lists of objects of type \code{block}.}
 }
 \description{
-A constructor of a block object of type \code{"DefinitionList"}.
+Constructs a block object of type \code{DefinitionList}.
 }
 \details{
-In the pandoc API \url{http://johnmacfarlane.net/BayHac2014/doc/pandoc-types/Text-Pandoc-Definition.html} the \code{DefinitionList} is described as follows, each list item is a pair consisting of a term (a list of \code{"inline"} objects) and one or more definitions (each a list of blocks).
+In the pandoc API \url{http://johnmacfarlane.net/BayHac2014/doc/pandoc-types/Text-Pandoc-Definition.html} the \code{DefinitionList} is described as follows, each list item is a pair consisting of a term (a list of \code{inline} objects) and one or more definitions (each a list of blocks).
 }
 \examples{
 key <- list(Str("key"))

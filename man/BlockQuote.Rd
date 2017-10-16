@@ -10,7 +10,7 @@ BlockQuote(blocks)
 \item{blocks}{a block object or list of block objects}
 }
 \description{
-A constructor of a block object of type \code{"BlockQuote"}.
+Constructs a block object of type \code{BlockQuote}.
 }
 \examples{
 BlockQuote(Plain("Hello R!"))

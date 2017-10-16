@@ -10,10 +10,10 @@ is.inline(x)
 \item{x}{an object to be tested.}
 }
 \value{
-a logical indicating if the provided object is of type \code{"inline"}.
+a logical indicating if the provided object is of type \code{inline}.
 }
 \description{
-Tests if an object has the class attribute \code{"inline"}.
+Tests if an object has the class attribute \code{inline}.
 }
 \examples{
 is.inline(as.inline(NULL))

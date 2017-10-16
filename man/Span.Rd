@@ -7,7 +7,7 @@
 Span(attr, inline)
 }
 \arguments{
-\item{attr}{an object of type \code{"Attr"}}
+\item{attr}{an object of type \link{Attr}}
 
 \item{inline}{a inline object or a list of inline objects which will be shown}
 }

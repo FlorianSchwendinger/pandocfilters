@@ -1,9 +1,9 @@
 ## a constructor for named lists
-nlist <- function(...) {
-  x <- list(...)
-  names(x) <- character(0)
-  x
-}
+# nlist <- function(...) {
+#   x <- list(...)
+#   names(x) <- character(0)
+#   x
+# }
 
 ##
 ##   Not Exported Function for Testing

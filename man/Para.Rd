@@ -10,7 +10,7 @@ Para(x)
 \item{x}{a inline object or list of inline objects}
 }
 \description{
-A constructor of a block object of type \code{"Para"}.
+Constructs a block object of type \code{Para}.
 }
 \examples{
 Para("x")

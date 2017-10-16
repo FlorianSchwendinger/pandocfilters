@@ -13,22 +13,21 @@
 ## type Attr = (String, [String], [(String, String)]) 
 Attr <- function(identifier="", classes=character(), key_val_pairs=list()) {
   if ( !is.character(classes) ) stop("'classes' has to be of type character!")
-  structure(
-    list(identifier, as.list(classes), key_val_pairs), 
-    class=c("Attr", "list")
-  )
+  z <- list(identifier, as.list(classes), key_val_pairs)
+  class(z) <- c("Attr", "list")
+  z
 }
 
 
 #' Citation.
 #' 
-#' A constructor of an object of type \code{"Citation"}.
+#' A constructor of an object of type `"Citation"`.
 #' 
 #' @param suffix a inline object or list of inline objects
 #' @param id a character string (not visible in the text)
 #' @param note_num an integer 
 #' @param mode a character string giving the citation mode, possible values are 
-#'             \code{"AuthorInText"}, \code{"SuppressAuthor"} and \code{"NormalCitation"}.
+#'             `"AuthorInText"`, `"SuppressAuthor"` and `"NormalCitation"`.
 #' @param prefix a inline object or list of inline objects
 #' @param hash an integer
 #' 

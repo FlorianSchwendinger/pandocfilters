@@ -10,10 +10,10 @@
 \item{...}{objects to be concatenated.}
 }
 \value{
-an list of \code{"block"} objects.
+an list of \code{block} objects.
 }
 \description{
-Objects of class \code{"block"} can be combined by using the generic default method \code{"c"} (combine).
+Objects of class \code{block} can be combined by using the generic default method \code{c} (combine).
 }
 \examples{
 c(Header( "R Basics" ), Header("What is R?", level=2),
