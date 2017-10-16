@@ -490,22 +490,32 @@ test_that("Note", {
   }
   
   ## Test Str with Header
+  no_ascii <- function(x)iconv(x, from = "latin1", to = "ASCII", sub = "")
   x <- pandocfilters:::test(list(Header(Note(list(block)))))
-  expect_equal(x, y)
-  x <- pandocfilters:::test(list(Header(Note(block))))
-  expect_equal(x, y)
+  expect_equal(no_ascii(x), no_ascii(y))
   
-  y <- collapse_newline(
-    "<a href=\"#fn1\" class=\"footnoteRef\" id=\"fnref1\"><sup>1</sup></a>", 
-    "<div class=\"footnotes\">", "<hr />", "<ol>", 
-    "<li id=\"fn1\">x<a href=\"#fnref1\">↩</a></li>", "</ol>", "</div>"
-  )
+  x <- pandocfilters:::test(list(Header(Note(block))))
+  expect_equal(no_ascii(x), no_ascii(y))
+  
+  y <- if(get_pandoc_version() < "2.0"){
+    collapse_newline(
+      "<a href=\"#fn1\" class=\"footnoteRef\" id=\"fnref1\"><sup>1</sup></a>", 
+      "<div class=\"footnotes\">", "<hr />", "<ol>", 
+      "<li id=\"fn1\">x<a href=\"#fnref1\">↩</a></li>", "</ol>", "</div>"
+    ) 
+  } else {
+    collapse_newline(
+      "<a href=\"#fn1\" class=\"footnoteRef\" id=\"fnref1\"><sup>1</sup></a>", 
+      "<section class=\"footnotes\">\n<hr />\n<ol>\n<li id=\"fn1\">x<a href=\"#fnref1\" class=\"footnoteBack\">â†©</a></li>\n</ol>\n</section>"
+    )
+  }
   ## Test Str with Plain
   x <- pandocfilters:::test(list(Plain(Note(list(block)))))
-  expect_equal(x, y)
+  expect_equal(no_ascii(x), no_ascii(y))
+
   x <- pandocfilters:::test(list(Plain(Note(block))))
-  expect_equal(x, y)
-  
+  expect_equal(no_ascii(x), no_ascii(y))
+    
 } )
 
 
