@@ -21,6 +21,12 @@
 ## 18. Note
 ## 19. Span
 
+Inline <- function(t, c = list()){
+  z <- list(t = t, c = c)
+  class(z) <- c("inline", "list")
+  z
+}
+
 
 #   1. Str
 
@@ -28,7 +34,7 @@
 #' 
 #' A constructor of an inline object of type `"Str"`.
 #' 
-#' To minimize the amount of unnecessary typing, pandoc filters automatically converts character strings to pandoc objects of type `"Str"` if needed. Furthermore, if a single inline object is provided where a list of inline objects is needed \pkg{pandocfilters} automatically converts this inline object into a list of inline objects. For example, the canonical way to emphasize the character string `"some text"` would be `Emph(list(Str("some text")))`. 
+#' To minimize the amount of unnecessary typing, \pkg{pandocfilters} automatically converts character strings to pandoc objects of type `"Str"` if needed. Furthermore, if a single inline object is provided where a list of inline objects is needed \pkg{pandocfilters} automatically converts this inline object into a list of inline objects. For example, the canonical way to emphasize the character string `"some text"` would be `Emph(list(Str("some text")))`. 
 #' 
 #' Since single inline objects are automatically transformed to lists of inline objects, this is equivalent to `Emph(Str("some text"))`. Since a character string is automatically transformed to an inline object, this is is equivalent to `Emph("some string")`. In short, whenever a list of inline objects is needed one can also use a single inline object or a character string.
 #'   
@@ -39,10 +45,7 @@
 #' @family Inline element constructors
 #' @export
 Str <- function(x) {
-  structure(
-    list(t="Str", c=x), 
-    class=c("inline", "list")
-  )
+  Inline(t = "Str", c = x)
 }
 
 
@@ -59,7 +62,7 @@ Str <- function(x) {
 #' @family Inline element constructors
 #' @export
 Emph <- function(x) {
-  structure(list(t="Emph", c=as.loio(x)), class=c("inline", "list"))
+  Inline(t = "Emph", c = as.loio(x))
 }
 
 
@@ -76,11 +79,7 @@ Emph <- function(x) {
 #' @family Inline element constructors
 #' @export
 Strong <- function(x) {
-  structure(
-    list(t="Strong", 
-         c=as.loio(x)), 
-    class=c("inline", "list")
-  )
+  Inline(t = "Strong", c = as.loio(x))
 }
 
 
@@ -97,7 +96,7 @@ Strong <- function(x) {
 #' @family Inline element constructors
 #' @export
 Strikeout <- function(x) {
-  structure(list(t="Strikeout", c=as.loio(x)), class=c("inline", "list"))
+  Inline(t = "Strikeout", c = as.loio(x))
 }
 
 
@@ -114,12 +113,7 @@ Strikeout <- function(x) {
 #' @family Inline element constructors
 #' @export
 Superscript <- function(x) {
-  structure(
-    list(
-      t="Superscript", 
-      c=as.loio(x)), 
-    class=c("inline", "list")
-  )
+  Inline(t = "Superscript", c = as.loio(x))
 }
 
 
@@ -136,7 +130,7 @@ Superscript <- function(x) {
 #' @family Inline element constructors
 #' @export
 Subscript <- function(x) {
-  structure(list(t="Subscript", c=as.loio(x)), class=c("inline", "list"))
+  Inline(t = "Subscript", c = as.loio(x))
 }
 
 
@@ -151,12 +145,7 @@ Subscript <- function(x) {
 #' @family Inline element constructors
 #' @export
 SmallCaps <- function(x) {
-  structure(
-    list(
-      t="SmallCaps", 
-      c=as.loio(x)), 
-    class=c("inline", "list")
-  )
+  Inline(t = "SmallCaps", c = as.loio(x))
 }
 
 
@@ -178,8 +167,7 @@ SmallCaps <- function(x) {
 ## Quoted QuoteType [Inline]
 ## Quoted text (list of inlines)
 Quoted <- function(x, quote_type="DoubleQuote") {
-  structure(list(t="Quoted", c=list(list(t=quote_type, c=list()), as.loio(x))), 
-            class=c("inline", "list"))
+  Inline(t = "Quoted", c = list(list(t=quote_type, c=list()), as.loio(x)))
 }
 
 
@@ -200,12 +188,7 @@ Quoted <- function(x, quote_type="DoubleQuote") {
 ## Citation (list of inlines)
 Cite <- function(citation, x) {
   if ( is.citation(citation) ) citation <- list(citation)
-  structure(
-    list(
-      t="Cite", 
-      c=list(citation, as.loio(x))), 
-    class=c("inline", "list")
-  )
+  Inline(t = "Cite", c = list(citation, as.loio(x)))
 }
 
 
@@ -256,12 +239,7 @@ Code <- function(code, name="", language=NULL, line_numbers=FALSE, start_from=1)
   }
   meta <- list(name, lang, linum)
   x <- list(meta, code)
-  structure(
-    list(
-      t="Code", 
-      c=x), 
-    class=c("inline", "list")
-  )
+  Inline(t = "Code", c = x)
 }
 
 
@@ -276,7 +254,7 @@ Code <- function(code, name="", language=NULL, line_numbers=FALSE, start_from=1)
 #' 
 #' @family Inline element constructors
 #' @export
-Space <- function() structure(Type("Space"), class=c("inline", "list"))
+Space <- function() Inline("Space")
 
 
 
@@ -294,11 +272,7 @@ Space <- function() structure(Type("Space"), class=c("inline", "list"))
 #' 
 #' @family Inline element constructors
 #' @export
-SoftBreak <- function()
-  structure(
-    Type("SoftBreak"), 
-    class=c("inline", "list")
-  )
+SoftBreak <- function() Inline("SoftBreak")
 
 
 #  13. LineBreak
@@ -312,11 +286,7 @@ SoftBreak <- function()
 #' 
 #' @family Inline element constructors
 #' @export
-LineBreak <- function() 
-  structure(
-    Type("LineBreak"), 
-    class=c("inline", "list")
-  )
+LineBreak <- function() Inline("LineBreak")
 
 
 #  14. Math
@@ -332,13 +302,7 @@ LineBreak <- function()
 #' @family Inline element constructors
 #' @export
 Math <- function(x) 
-  structure(
-    list(
-      t="Math", 
-      c=list(Type("InlineMath"), x)), 
-    class=c("inline", "list")
-  )
-
+  Inline(t = "Math", c = list(Type("InlineMath"), x))
 
 
 #  15. RawInline
@@ -355,7 +319,7 @@ Math <- function(x)
 #' @family Inline element constructors
 #' @export
 RawInline <- function(format, x) {
-  structure(list(t="RawInline", c=list(format, x)), class=c("inline", "list"))
+  Inline(t = "RawInline", c = list(format, x))
 }
 
 
@@ -368,7 +332,7 @@ RawInline <- function(format, x) {
 #' @param target a character string giving the target (hyper reference)
 #' @param text a inline object or a list of inline objects giving the visible part
 #' @param title an optional character string giving the title
-#' @param attr an optional object of type `"Attr"`
+#' @param attr an optional object of type [Attr]
 #' @details Further Usage examples can be found in the README.
 #' @examples
 #' Link("https://cran.r-project.org/", "Text_Shown", "some title")
@@ -379,16 +343,16 @@ RawInline <- function(format, x) {
 ## Link Attr [Inline] Target | Hyperlink: "alt text" (list of inlines), target
 Link <- function(target, text, title="", attr=Attr()) {
   if ( get_pandoc_version() < "1.16" ) {
-    return( structure(list(t="Link", c=list(as.loio(text), 
-                                            list(target, title))), 
-                      class=c("inline", "list")) )
-  }
-  structure(
-    list(t="Link", c=list(attr,
-                          as.loio(text), 
-                          list(target, title))), 
-    class=c("inline", "list")
+    Inline(
+      t="Link", 
+      c=list(as.loio(text), list(target, title))
     )
+  } else {
+    Inline(
+      t = "Link", 
+      c = list(attr, as.loio(text), list(target, title))
+    )
+  }
 }
 
 
@@ -409,23 +373,16 @@ Link <- function(target, text, title="", attr=Attr()) {
 ## Image Attr [Inline] Target | Image: alt text (list of inlines), target
 Image <- function(target, text, caption="", attr=Attr()) {
   if ( get_pandoc_version() < "1.16" ) {
-    return(
-      structure(
-        list(t="Image", 
-             c=list(
-               as.loio(text),
-               list(target, caption))
-        ),
-        class=c("inline", "list")) 
+    Inline(
+      t = "Image", 
+      c = list(as.loio(text), list(target, caption))
+    )
+  } else {
+    Inline(
+      t = "Image", 
+      c = list(attr, as.loio(text), list(target, caption))
     )
   }
-  structure(
-    list(
-      t="Image", 
-      c=list(attr,as.loio(text), list(target, caption))
-    ),
-    class=c("inline", "list")
-  )
 }
 
 
@@ -447,13 +404,7 @@ Image <- function(target, text, caption="", attr=Attr()) {
 ## note <- Note(block)
 ## pandocfilters:::test(list(Plain(note)))
 Note <- function(x) {
-  structure(
-    list(
-      t="Note", 
-      c=as.lobo(x)
-    ), 
-    class=c("inline", "list")
-  )
+  Inline(t = "Note", c = as.lobo(x))
 }
 
 
@@ -464,7 +415,7 @@ Note <- function(x) {
 #' 
 #' A constructor of an inline object of type `"Span"`.
 #' 
-#' @param attr an object of type `"Attr"`
+#' @param attr an object of type [Attr]
 #' @param inline a inline object or a list of inline objects which will be shown
 #' @examples
 #' attr <- Attr("A", "B", list(c("C", "D")))
@@ -473,11 +424,9 @@ Note <- function(x) {
 #' @family Inline element constructors
 #' @export
 Span <- function(attr, inline) {
-  structure(
-    list(
-      t="Span", 
-      c=list(attr, as.loio(inline))), 
-    class=c("inline", "list")
+  Inline(
+    t ="Span", 
+    c = list(attr, as.loio(inline))
   )
 }
 
