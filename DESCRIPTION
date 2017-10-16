@@ -21,7 +21,7 @@ URL: http://pandoc.org/, https://github.com/jgm/pandocfilters/
 Depends:
     R (>= 2.15)
 Imports:
-    jsonlite, base
+    jsonlite, base, R6
 Suggests:
     rmarkdown
 SystemRequirements: pandoc (> 1.12)
