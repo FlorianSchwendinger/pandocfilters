@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 
-The constructor functions in the **pandocfilters** package can also be used to create a new document by reproducing the AST. To show how this is done we use the first paragraph of chapter 2.1 from the [R-FAQ](https://cran.r-project.org/doc/FAQ/R-FAQ.txt)  and apply different inline elements. The output is saved as HTML file. 
+The constructor functions in the **pandocfilters** package can also be used to create a new document by reproducing the Abstract Syntax Tree (AST). To show how this is done we use the first paragraph of chapter 2.1 from the [R-FAQ](https://cran.r-project.org/doc/FAQ/R-FAQ.txt)  and apply different inline elements.
 
 In general, a **pandocfilters** document is a list of two elements:     
 
@@ -26,10 +26,10 @@ In general, a **pandocfilters** document is a list of two elements:
    
 The content is composed of lists of blocks, where each block itself usually  consists of a list of inline elements. 
 
-**NOTE:**
+> **NOTE:**
+> If an inline object is needed and a character vector is given, **pandocfilters** automatically transforms the character string to an 'inline' object of type 'Str'.
 
-*If an inline object is needed and a character vector is given, **pandocfilters** automatically transforms the character string to an 'inline' object of type 'Str'.*
-    
+
 
 ## Creating a new document
 
@@ -42,29 +42,38 @@ require("pandocfilters", quietly = TRUE, warn.conflicts = FALSE)
 ```{r}
 # Create a new document.
 doc <- document()
+```
 
-# Create a non-standard writer function so we can look at the document while writing it.
+
+The new object, `doc` is an R6 object with methods (functions) that allow you to modify the document. To view the available methods, use:
+
+```{r}
+doc
+```
+
+Create a non-standard writer function so we can look at the document while writing it.
+
+```{r}
 cat_writer <- function(x, con = stdout(), format = "json") {
   x <- pandoc_from_json(x, to = format)
   cat(paste(x, collapse = "\n"))
 }
 
-# Append a Header and look at the document
 args(doc$append_header)
 ```
 
+Append a header and look at the document
 
 ```{r}
 doc$append_header( "R Basics" )
 doc$write(format = "html", writer = cat_writer)
 ```
 
+Next, append a level 2 header, and then some plain text with formatting:
 
 ```{r, results='hide'}
-# Append a level 2 Header
 doc$append_header( "What is R?", level = 2)
 
-# Append Plain text with inline formating
 x <- c(
   Emph("R"), Space(), "is a system for ", 
   Strong("statistical computation"), Space(), Strikeout("and"), 
@@ -73,9 +82,9 @@ x <- c(
   Quoted("of", quote_type = "SingleQuote"), Space(), 
   Quoted("a", quote_type = "DoubleQuote"), Space(), 
   RawInline("html", "<i>language</i>"), 
-  " plus a run-time environment with", " graphics, a debugger, access to ",
-  "certain system functions,", 
-  " and the ability to run programs stored in script files."
+  " plus a run-time environment with graphics, a debugger, access to ",
+  "certain system functions, and the ability to run programs ", 
+  "stored in script files."
 )
 
 doc$append_plain( x )
