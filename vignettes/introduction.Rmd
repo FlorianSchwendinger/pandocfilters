@@ -1,0 +1,192 @@
+---
+title: "Introduction to pandocfilters"
+author: "Florian Schwendinger and Andrie de Vries"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to pandocfilters}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+The document converter [pandoc](http://pandoc.org/) is widely used
+in the R community. One feature of pandoc is that it can produce and consume
+JSON-formatted abstract syntax trees (AST). This allows to transform a given
+source document into JSON-formatted AST, alter it by so called filters and pass the altered JSON-formatted AST back to pandoc. This package provides functions which allow to write such filters in native R code. The package is inspired by the Python package [pandocfilters](https://github.com/jgm/pandocfilters/).
+
+To alter the AST, the JSON representations of the data structures building the AST have to be replicated. For this purpose, **pandocfilters** provides a set of constructors, with the goal to ease building / altering the AST.
+
+## Installation 
+
+You can find information about installing pandoc at 
+[http://pandoc.org/installing.html](http://pandoc.org/installing.html).  
+
+**NOTE:** 
+*There have been API-changes in pandoc 1.16. To account for this changes, 
+**pandocfilters** needs to know the pandoc version. Therefore, **pandocfilters**   will try to get the pandoc version at startup. However, it is also possible 
+to get and set the pandoc version via the functions `get_pandoc_version()` 
+and `set_pandoc_version()`.*
+
+
+```{r initialize}
+require("pandocfilters", quietly = TRUE, warn.conflicts = FALSE)
+# Get the pandoc version.
+get_pandoc_version()
+```
+
+
+```{r pandoc_version, eval=FALSE} 
+# Set the pandoc version.
+set_pandoc_version(1.16)
+```
+
+
+## Constructors
+
+As mentioned before, constructors are used to replicate the pandoc AST in R.
+For this purpose, pandoc provides two basic types, **inline** elements and 
+**block** elements. An extensive list can be found below.
+
+To minimize the amount of unnecessary typing **pandocfilters** automatically 
+converts character strings to pandoc objects of type `"Str"` if needed.
+Furthermore, if a single inline object is provided where a list of inline 
+objects is needed **pandocfilters** automatically converts this inline 
+object into a list of inline objects.
+
+For example, the canonical way to emphasize the character string `"some text"` would be
+
+```r
+Emph(list(Str("some text")))
+```
+
+Since single inline objects are automatically transformed to lists of inline objects, this is equivalent to
+
+```r
+Emph(Str("some text"))
+```
+
+Since a character string is automatically transformed to an inline object, this is equivalent to
+
+```r
+Emph("some text")
+```
+
+In short, whenever a list of inline objects is needed one can also use a single inline object or a character string, and therefore the following three code lines are equivalent.   
+
+
+```{r emph, eval = FALSE}
+Emph(list(Str("some text")))
+Emph(Str("some text"))
+Emph("some text")
+```
+
+
+### Inline Elements
+
+1. `Str(x)`
+2. `Emph(x)`
+3. `Strong(x)`
+4. `Strikeout(x)`
+5. `Superscript(x)`
+6. `Subscript(x)`
+7. `SmallCaps(x)`
+8. `Quoted(x, quote_type)`
+9. `Cite(citation, x)`
+10. `Code(code, name, language, line_numbers, start_from)`
+11. `Space()`
+12. `SoftBreak()`
+13. `LineBreak()`
+14. `Math(x)`
+15. `RawInline(format, x)`
+16. `Link(target, text, title, attr)`
+17. `Image(target, text, caption, attr)`
+18. `Span(attr, inline)`
+               
+        
+### Block Elements
+
+1. `Plain(x)`
+2. `Para(x)`
+3. `CodeBlock(attr, code)`
+4. `BlockQuote(blocks)`
+5. `OrderedList(lattr, lblocks)`
+6. `BulletList(lblocks)`
+7. `DefinitionList(x)`
+8. `Header(x, level, attr)`
+9. `HorizontalRule()`
+10. `Table(rows, col_names, aligns, col_width, caption)`
+11. `Div(blocks, attr)`
+12. `Null()`
+
+### Argument Constructors
+
+1. `Attr(identifier, classes, key_val_pairs)`
+2. `Citation(suffix, id, note_num, mode, prefix, hash)`
+3. `TableCell(x)`
+
+
+## Altering the AST
+
+To read, write and test the AST you can use some utility functions: 
+
+### Utility Functions
+
+
+```{r utility_functions, eval=FALSE}
+pandoc_to_json()
+pandoc_from_json()
+test_filter()
+```
+
+## Examples
+
+### Lower Case 
+
+The following example shows how to obtain the AST from a markdown file 
+(`"lower_case.md"`) and convert every object of type `Str` to lower case.
+
+
+```{r caps}
+caps <- function(key, value, ...) {
+    if (key == "Str") return( Str( tolower(value) ) )
+    return(NULL)
+}
+
+example <- file.path(
+  system.file(package = "pandocfilters"), 
+  "examples", 
+  "lower_case.md"
+)
+
+# the file before transformation
+readLines(example)
+```
+
+
+```{r apply_caps}
+# read connection
+input_connection <- textConnection(pandoc_to_json(example, from = "markdown"))
+# write connection
+output_connection <- textConnection("modified_ast", open = "w")
+
+# apply filter
+filter(caps, input = input_connection, output = output_connection)
+
+# convert altered ast to markdown
+pandoc_from_json(modified_ast, to = "markdown")
+```
+
+
+```{r close}
+close(input_connection)
+close(output_connection)
+```
+

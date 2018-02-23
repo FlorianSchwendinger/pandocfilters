@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Florian Schwendinger and Andrie de Vries" />
+
+<meta name="date" content="2017-10-13" />
+
+<title>Creating a new document using pandocfilters</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+div.sourceLine, a.sourceLine { display: inline-block; min-height: 1.25em; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; }
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+div.sourceLine, a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+.numberSource div.sourceLine, .numberSource a.sourceLine
+  { position: relative; }
+.numberSource div.sourceLine::before, .numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em; }
+.numberSource pre.sourceCode { margin-left: 3em; border-left: 1px solid #aaaaaa; color: #aaaaaa;  padding-left: 4px; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; color = initial; }
+}
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.bn { color: #40a070; } /* BaseN */
+code span.fl { color: #40a070; } /* Float */
+code span.ch { color: #4070a0; } /* Char */
+code span.st { color: #4070a0; } /* String */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.ot { color: #007020; } /* Other */
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.fu { color: #06287e; } /* Function */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code span.cn { color: #880000; } /* Constant */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.im { } /* Import */
+code span.va { color: #19177c; } /* Variable */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.op { color: #666666; } /* Operator */
+code span.bu { } /* BuiltIn */
+code span.ex { } /* Extension */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.at { color: #7d9029; } /* Attribute */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<style type="text/css">body {background-color: #fff;margin: 1em auto;max-width: 700px;overflow: visible;padding-left: 2em;padding-right: 2em;font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;font-size: 14px;line-height: 1.35;}#header {text-align: center;}#TOC {clear: both;margin: 0 0 10px 10px;padding: 4px;width: 400px;border: 1px solid #CCCCCC;border-radius: 5px;background-color: #f6f6f6;font-size: 13px;line-height: 1.3;}#TOC .toctitle {font-weight: bold;font-size: 15px;margin-left: 5px;}#TOC ul {padding-left: 40px;margin-left: -1.5em;margin-top: 5px;margin-bottom: 5px;}#TOC ul ul {margin-left: -2em;}#TOC li {line-height: 16px;}table {margin: 1em auto;border-width: 1px;border-color: #DDDDDD;border-style: outset;border-collapse: collapse;}table th {border-width: 2px;padding: 5px;border-style: inset;}table td {border-width: 1px;border-style: inset;line-height: 18px;padding: 5px 5px;}table, table th, table td {border-left-style: none;border-right-style: none;}table thead, table tr.even {background-color: #f7f7f7;}p {margin: 0.5em 0;}blockquote {background-color: #f6f6f6;padding: 0.25em 0.75em;}hr {border-style: solid;border: none;border-top: 1px solid #777;margin: 28px 0;}dl {margin-left: 0;}dl dd {margin-bottom: 13px;margin-left: 13px;}dl dt {font-weight: bold;}ul {margin-top: 0;}ul li {list-style: circle outside;}ul ul {margin-bottom: 0;}pre, code {background-color: #f7f7f7;border-radius: 3px;color: #333;white-space: pre-wrap; }pre {border-radius: 3px;margin: 5px 0px 10px 0px;padding: 10px;}pre:not([class]) {background-color: #f7f7f7;}code {font-family: Consolas, Monaco, 'Courier New', monospace;font-size: 85%;}p > code, li > code {padding: 2px 0px;}div.figure {text-align: center;}img {background-color: #FFFFFF;padding: 2px;border: 1px solid #DDDDDD;border-radius: 3px;border: 1px solid #CCCCCC;margin: 0 5px;}h1 {margin-top: 0;font-size: 35px;line-height: 40px;}h2 {border-bottom: 4px solid #f7f7f7;padding-top: 10px;padding-bottom: 2px;font-size: 145%;}h3 {border-bottom: 2px solid #f7f7f7;padding-top: 10px;font-size: 120%;}h4 {border-bottom: 1px solid #f7f7f7;margin-left: 8px;font-size: 105%;}h5, h6 {border-bottom: 1px solid #ccc;font-size: 105%;}a {color: #0033dd;text-decoration: none;}a:hover {color: #6666ff; }a:visited {color: #800080; }a:visited:hover {color: #BB00BB; }a[href^="http:"] {text-decoration: underline; }a[href^="https:"] {text-decoration: underline; }code > span.kw { color: #555; font-weight: bold; } code > span.dt { color: #902000; } code > span.dv { color: #40a070; } code > span.bn { color: #d14; } code > span.fl { color: #d14; } code > span.ch { color: #d14; } code > span.st { color: #d14; } code > span.co { color: #888888; font-style: italic; } code > span.ot { color: #007020; } code > span.al { color: #ff0000; font-weight: bold; } code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } </style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Creating a new document using pandocfilters</h1>
+<h4 class="author"><em>Florian Schwendinger and Andrie de Vries</em></h4>
+<h4 class="date"><em>2017-10-13</em></h4>
+
+
+
+<p>The constructor functions in the <strong>pandocfilters</strong> package can also be used to create a new document by reproducing the AST. To show how this is done we use the first paragraph of chapter 2.1 from the <a href="https://cran.r-project.org/doc/FAQ/R-FAQ.txt">R-FAQ</a> and apply different inline elements. The output is saved as HTML file.</p>
+<p>In general, a <strong>pandocfilters</strong> document is a list of two elements:</p>
+<ul>
+<li>Metadata</li>
+<li>Content</li>
+</ul>
+<p>The content is composed of lists of blocks, where each block itself usually consists of a list of inline elements.</p>
+<p><strong>NOTE:</strong></p>
+<p><em>If an inline object is needed and a character vector is given, <strong>pandocfilters</strong> automatically transforms the character string to an ‘inline’ object of type ‘Str’.</em></p>
+<section id="creating-a-new-document" class="level2">
+<h2>Creating a new document</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="kw">require</span>(<span class="st">&quot;pandocfilters&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</div></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="co"># Create a new document.</span></div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2">doc &lt;-<span class="st"> </span><span class="kw">document</span>()</div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co"># Create a non-standard writer function so we can look at the document while writing it.</span></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5">cat_writer &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">con =</span> <span class="kw">stdout</span>(), <span class="dt">format =</span> <span class="st">&quot;json&quot;</span>) {</div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6">  x &lt;-<span class="st"> </span><span class="kw">pandoc_from_json</span>(x, <span class="dt">to =</span> format)</div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7">  <span class="kw">cat</span>(<span class="kw">paste</span>(x, <span class="dt">collapse =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>))</div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8">}</div>
+<div class="sourceLine" id="9" href="#9" data-line-number="9"></div>
+<div class="sourceLine" id="10" href="#10" data-line-number="10"><span class="co"># Append a Header and look at the document</span></div>
+<div class="sourceLine" id="11" href="#11" data-line-number="11"><span class="kw">args</span>(doc<span class="op">$</span>append_header)</div>
+<div class="sourceLine" id="12" href="#12" data-line-number="12"><span class="co">#&gt; function (x, level = 1L, attr = Attr()) </span></div>
+<div class="sourceLine" id="13" href="#13" data-line-number="13"><span class="co">#&gt; NULL</span></div></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">doc<span class="op">$</span><span class="kw">append_header</span>( <span class="st">&quot;R Basics&quot;</span> )</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2">doc<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;html&quot;</span>, <span class="dt">writer =</span> cat_writer)</div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="co">#&gt; &lt;h1&gt;R Basics&lt;/h1&gt;</span></div></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1"><span class="co"># Append a level 2 Header</span></div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2">doc<span class="op">$</span><span class="kw">append_header</span>( <span class="st">&quot;What is R?&quot;</span>, <span class="dt">level =</span> <span class="dv">2</span>)</div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co"># Append Plain text with inline formating</span></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5">x &lt;-<span class="st"> </span><span class="kw">c</span>(</div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6">  <span class="kw">Emph</span>(<span class="st">&quot;R&quot;</span>), <span class="kw">Space</span>(), <span class="st">&quot;is a system for &quot;</span>, </div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7">  <span class="kw">Strong</span>(<span class="st">&quot;statistical computation&quot;</span>), <span class="kw">Space</span>(), <span class="kw">Strikeout</span>(<span class="st">&quot;and&quot;</span>), </div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8">  <span class="kw">Space</span>(), <span class="kw">Superscript</span>(<span class="st">&quot;graphics&quot;</span>), <span class="st">&quot;. &quot;</span>, <span class="kw">LineBreak</span>(), </div>
+<div class="sourceLine" id="9" href="#9" data-line-number="9">  <span class="kw">Subscript</span>(<span class="st">&quot;It&quot;</span>), <span class="kw">Space</span>(), <span class="kw">SmallCaps</span>(<span class="st">&quot;consists&quot;</span>), <span class="kw">Space</span>(), </div>
+<div class="sourceLine" id="10" href="#10" data-line-number="10">  <span class="kw">Quoted</span>(<span class="st">&quot;of&quot;</span>, <span class="dt">quote_type =</span> <span class="st">&quot;SingleQuote&quot;</span>), <span class="kw">Space</span>(), </div>
+<div class="sourceLine" id="11" href="#11" data-line-number="11">  <span class="kw">Quoted</span>(<span class="st">&quot;a&quot;</span>, <span class="dt">quote_type =</span> <span class="st">&quot;DoubleQuote&quot;</span>), <span class="kw">Space</span>(), </div>
+<div class="sourceLine" id="12" href="#12" data-line-number="12">  <span class="kw">RawInline</span>(<span class="st">&quot;html&quot;</span>, <span class="st">&quot;&lt;i&gt;language&lt;/i&gt;&quot;</span>), </div>
+<div class="sourceLine" id="13" href="#13" data-line-number="13">  <span class="st">&quot; plus a run-time environment with&quot;</span>, <span class="st">&quot; graphics, a debugger, access to &quot;</span>,</div>
+<div class="sourceLine" id="14" href="#14" data-line-number="14">  <span class="st">&quot;certain system functions,&quot;</span>, </div>
+<div class="sourceLine" id="15" href="#15" data-line-number="15">  <span class="st">&quot; and the ability to run programs stored in script files.&quot;</span></div>
+<div class="sourceLine" id="16" href="#16" data-line-number="16">)</div>
+<div class="sourceLine" id="17" href="#17" data-line-number="17"></div>
+<div class="sourceLine" id="18" href="#18" data-line-number="18">doc<span class="op">$</span><span class="kw">append_plain</span>( x )</div>
+<div class="sourceLine" id="19" href="#19" data-line-number="19">doc<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;html&quot;</span>, <span class="dt">writer =</span> cat_writer)</div></code></pre></div>
+<div style="background-color:powderblue; margin:10%;">
+<h1>
+R Basics
+</h1>
+<h2>
+What is R?
+</h2>
+<p><em>R</em> is a system for <strong>statistical computation</strong> <del>and</del> <sup>graphics</sup>. <br /> <sub>It</sub> <span class="smallcaps">consists</span> âofâ âaâ <i>language</i> plus a run-time environment with graphics, a debugger, access to certain system functions, and the ability to run programs stored in script files.</p>
+</div>
+</section>
+<section id="modifying-the-abstract-syntax-tree" class="level2">
+<h2>Modifying the abstract syntax tree</h2>
+<p>If you carefully at the output, you can see that quotes don’t look very nice. Instead, they look like garbage characters.</p>
+<p>This can be fixed by using the function <code>astrapply()</code>. In most cases it is best to look at the AST via <code>str()</code> to see what should be replaced. Since the quote doesn’t look good in the HTML case we replace it with <code>&lt;q&gt;text&lt;/q&gt;</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">fix_quotes_fun &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2">  <span class="kw">RawInline</span>(<span class="st">&quot;html&quot;</span>, <span class="kw">sprintf</span>(<span class="st">&quot;&lt;q&gt;%s&lt;/q&gt;&quot;</span>, x<span class="op">$</span>c))</div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3">}</div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5">fix_quotes &lt;-<span class="st"> </span><span class="cf">function</span>(type, content, ...) {</div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6">  <span class="cf">if</span> (type <span class="op">==</span><span class="st"> &quot;Quoted&quot;</span>) {       </div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7">    <span class="kw">lapply</span>(content[[<span class="op">-</span><span class="dv">1</span>]], fix_quotes_fun)</div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8">  }</div>
+<div class="sourceLine" id="9" href="#9" data-line-number="9">}</div></code></pre></div>
+<p>Now modify the document and inspect the results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">doc<span class="op">$</span>doc &lt;-<span class="st"> </span><span class="kw">astrapply</span>(doc<span class="op">$</span>doc, <span class="dt">FUN =</span> fix_quotes)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2">doc<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;html&quot;</span>, <span class="dt">writer =</span> cat_writer)</div></code></pre></div>
+<div style="background-color:powderblue; margin:10%;">
+<h1>
+R Basics
+</h1>
+<h2>
+What is R?
+</h2>
+<p><em>R</em> is a system for <strong>statistical computation</strong> <del>and</del> <sup>graphics</sup>. <br /> <sub>It</sub> <span class="smallcaps">consists</span> <q>of</q> <q>a</q> <i>language</i> plus a run-time environment with graphics, a debugger, access to certain system functions, and the ability to run programs stored in script files.</p>
+</div>
+</section>
+<section id="create-a-table" class="level2">
+<h2>Create a Table</h2>
+<p>The <em>pandocfilters</em> package makes it easy to construct tables in pandoc format.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">table &lt;-<span class="st"> </span><span class="kw">document</span>()</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2">table<span class="op">$</span><span class="kw">append_table</span>(cars[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, ])</div></code></pre></div>
+<p>Once you have the table, you can render the output to various different formats.</p>
+<section id="markdown" class="level3">
+<h3>markdown</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">table<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;markdown&quot;</span>, <span class="dt">writer =</span> cat_writer)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="co">#&gt;   speed   dist</span></div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="co">#&gt;   ------- ------</span></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co">#&gt;   4       2</span></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5"><span class="co">#&gt;   4       10</span></div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6"><span class="co">#&gt;   7       4</span></div></code></pre></div>
+</section>
+<section id="html" class="level3">
+<h3>html</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">table<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;html&quot;</span>, <span class="dt">writer =</span> cat_writer)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="co">#&gt; &lt;table&gt;</span></div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="co">#&gt; &lt;thead&gt;</span></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co">#&gt; &lt;tr class=&quot;header&quot;&gt;</span></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5"><span class="co">#&gt; &lt;th&gt;speed&lt;/th&gt;</span></div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6"><span class="co">#&gt; &lt;th&gt;dist&lt;/th&gt;</span></div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7"><span class="co">#&gt; &lt;/tr&gt;</span></div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8"><span class="co">#&gt; &lt;/thead&gt;</span></div>
+<div class="sourceLine" id="9" href="#9" data-line-number="9"><span class="co">#&gt; &lt;tbody&gt;</span></div>
+<div class="sourceLine" id="10" href="#10" data-line-number="10"><span class="co">#&gt; &lt;tr class=&quot;odd&quot;&gt;</span></div>
+<div class="sourceLine" id="11" href="#11" data-line-number="11"><span class="co">#&gt; &lt;td&gt;4&lt;/td&gt;</span></div>
+<div class="sourceLine" id="12" href="#12" data-line-number="12"><span class="co">#&gt; &lt;td&gt;2&lt;/td&gt;</span></div>
+<div class="sourceLine" id="13" href="#13" data-line-number="13"><span class="co">#&gt; &lt;/tr&gt;</span></div>
+<div class="sourceLine" id="14" href="#14" data-line-number="14"><span class="co">#&gt; &lt;tr class=&quot;even&quot;&gt;</span></div>
+<div class="sourceLine" id="15" href="#15" data-line-number="15"><span class="co">#&gt; &lt;td&gt;4&lt;/td&gt;</span></div>
+<div class="sourceLine" id="16" href="#16" data-line-number="16"><span class="co">#&gt; &lt;td&gt;10&lt;/td&gt;</span></div>
+<div class="sourceLine" id="17" href="#17" data-line-number="17"><span class="co">#&gt; &lt;/tr&gt;</span></div>
+<div class="sourceLine" id="18" href="#18" data-line-number="18"><span class="co">#&gt; &lt;tr class=&quot;odd&quot;&gt;</span></div>
+<div class="sourceLine" id="19" href="#19" data-line-number="19"><span class="co">#&gt; &lt;td&gt;7&lt;/td&gt;</span></div>
+<div class="sourceLine" id="20" href="#20" data-line-number="20"><span class="co">#&gt; &lt;td&gt;4&lt;/td&gt;</span></div>
+<div class="sourceLine" id="21" href="#21" data-line-number="21"><span class="co">#&gt; &lt;/tr&gt;</span></div>
+<div class="sourceLine" id="22" href="#22" data-line-number="22"><span class="co">#&gt; &lt;/tbody&gt;</span></div>
+<div class="sourceLine" id="23" href="#23" data-line-number="23"><span class="co">#&gt; &lt;/table&gt;</span></div></code></pre></div>
+</section>
+<section id="html5" class="level3">
+<h3>html5</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">table<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;html5&quot;</span>, <span class="dt">writer =</span> cat_writer)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="co">#&gt; &lt;table&gt;</span></div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="co">#&gt; &lt;thead&gt;</span></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co">#&gt; &lt;tr class=&quot;header&quot;&gt;</span></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5"><span class="co">#&gt; &lt;th&gt;speed&lt;/th&gt;</span></div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6"><span class="co">#&gt; &lt;th&gt;dist&lt;/th&gt;</span></div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7"><span class="co">#&gt; &lt;/tr&gt;</span></div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8"><span class="co">#&gt; &lt;/thead&gt;</span></div>
+<div class="sourceLine" id="9" href="#9" data-line-number="9"><span class="co">#&gt; &lt;tbody&gt;</span></div>
+<div class="sourceLine" id="10" href="#10" data-line-number="10"><span class="co">#&gt; &lt;tr class=&quot;odd&quot;&gt;</span></div>
+<div class="sourceLine" id="11" href="#11" data-line-number="11"><span class="co">#&gt; &lt;td&gt;4&lt;/td&gt;</span></div>
+<div class="sourceLine" id="12" href="#12" data-line-number="12"><span class="co">#&gt; &lt;td&gt;2&lt;/td&gt;</span></div>
+<div class="sourceLine" id="13" href="#13" data-line-number="13"><span class="co">#&gt; &lt;/tr&gt;</span></div>
+<div class="sourceLine" id="14" href="#14" data-line-number="14"><span class="co">#&gt; &lt;tr class=&quot;even&quot;&gt;</span></div>
+<div class="sourceLine" id="15" href="#15" data-line-number="15"><span class="co">#&gt; &lt;td&gt;4&lt;/td&gt;</span></div>
+<div class="sourceLine" id="16" href="#16" data-line-number="16"><span class="co">#&gt; &lt;td&gt;10&lt;/td&gt;</span></div>
+<div class="sourceLine" id="17" href="#17" data-line-number="17"><span class="co">#&gt; &lt;/tr&gt;</span></div>
+<div class="sourceLine" id="18" href="#18" data-line-number="18"><span class="co">#&gt; &lt;tr class=&quot;odd&quot;&gt;</span></div>
+<div class="sourceLine" id="19" href="#19" data-line-number="19"><span class="co">#&gt; &lt;td&gt;7&lt;/td&gt;</span></div>
+<div class="sourceLine" id="20" href="#20" data-line-number="20"><span class="co">#&gt; &lt;td&gt;4&lt;/td&gt;</span></div>
+<div class="sourceLine" id="21" href="#21" data-line-number="21"><span class="co">#&gt; &lt;/tr&gt;</span></div>
+<div class="sourceLine" id="22" href="#22" data-line-number="22"><span class="co">#&gt; &lt;/tbody&gt;</span></div>
+<div class="sourceLine" id="23" href="#23" data-line-number="23"><span class="co">#&gt; &lt;/table&gt;</span></div></code></pre></div>
+</section>
+<section id="org" class="level3">
+<h3>org</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">table<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;org&quot;</span>, <span class="dt">writer =</span> cat_writer)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="co">#&gt; | speed   | dist   |</span></div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="co">#&gt; |---------+--------|</span></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co">#&gt; | 4       | 2      |</span></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5"><span class="co">#&gt; | 4       | 10     |</span></div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6"><span class="co">#&gt; | 7       | 4      |</span></div></code></pre></div>
+</section>
+<section id="latex" class="level3">
+<h3>latex</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">table<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;latex&quot;</span>, <span class="dt">writer =</span> cat_writer)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="co">#&gt; \begin{longtable}[]{@{}ll@{}}</span></div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="co">#&gt; \toprule</span></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co">#&gt; speed &amp; dist\tabularnewline</span></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5"><span class="co">#&gt; \midrule</span></div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6"><span class="co">#&gt; \endhead</span></div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7"><span class="co">#&gt; 4 &amp; 2\tabularnewline</span></div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8"><span class="co">#&gt; 4 &amp; 10\tabularnewline</span></div>
+<div class="sourceLine" id="9" href="#9" data-line-number="9"><span class="co">#&gt; 7 &amp; 4\tabularnewline</span></div>
+<div class="sourceLine" id="10" href="#10" data-line-number="10"><span class="co">#&gt; \bottomrule</span></div>
+<div class="sourceLine" id="11" href="#11" data-line-number="11"><span class="co">#&gt; \end{longtable}</span></div></code></pre></div>
+</section>
+<section id="rst" class="level3">
+<h3>rst</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">table<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;rst&quot;</span>, <span class="dt">writer =</span> cat_writer)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="co">#&gt; +-------+------+</span></div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="co">#&gt; | speed | dist |</span></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co">#&gt; +=======+======+</span></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5"><span class="co">#&gt; | 4     | 2    |</span></div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6"><span class="co">#&gt; +-------+------+</span></div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7"><span class="co">#&gt; | 4     | 10   |</span></div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8"><span class="co">#&gt; +-------+------+</span></div>
+<div class="sourceLine" id="9" href="#9" data-line-number="9"><span class="co">#&gt; | 7     | 4    |</span></div>
+<div class="sourceLine" id="10" href="#10" data-line-number="10"><span class="co">#&gt; +-------+------+</span></div></code></pre></div>
+</section>
+<section id="asciidoc" class="level3">
+<h3>asciidoc</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class="sourceLine" id="1" href="#1" data-line-number="1">table<span class="op">$</span><span class="kw">write</span>(<span class="dt">format =</span> <span class="st">&quot;asciidoc&quot;</span>, <span class="dt">writer =</span> cat_writer)</div>
+<div class="sourceLine" id="2" href="#2" data-line-number="2"><span class="co">#&gt; [cols=&quot;,&quot;,options=&quot;header&quot;,]</span></div>
+<div class="sourceLine" id="3" href="#3" data-line-number="3"><span class="co">#&gt; |===========</span></div>
+<div class="sourceLine" id="4" href="#4" data-line-number="4"><span class="co">#&gt; |speed |dist</span></div>
+<div class="sourceLine" id="5" href="#5" data-line-number="5"><span class="co">#&gt; |4 |2</span></div>
+<div class="sourceLine" id="6" href="#6" data-line-number="6"><span class="co">#&gt; |4 |10</span></div>
+<div class="sourceLine" id="7" href="#7" data-line-number="7"><span class="co">#&gt; |7 |4</span></div>
+<div class="sourceLine" id="8" href="#8" data-line-number="8"><span class="co">#&gt; |===========</span></div></code></pre></div>
+</section>
+</section>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

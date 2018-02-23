@@ -2,7 +2,7 @@
 % Please edit documentation in R/utility.R
 \name{pandocfilters_writer}
 \alias{pandocfilters_writer}
-\title{Write the JSON-formatted AST to a connection}
+\title{Write the JSON-formatted AST to a connection.}
 \usage{
 pandocfilters_writer(x, con, format)
 }
@@ -17,8 +17,5 @@ pandocfilters_writer(x, con, format)
 Write the JSON-formatted AST to a connection.
 }
 \details{
-If you want to apply a filter to the document before it get's written out, or your
-         pandoc installation is not registered in the \code{PATH} it can be favorable to provide your
-         own writer function to the document class.
+If you want to apply a filter to the document before it get's written out, or your pandoc installation is not registered in the \code{PATH} it can be favorable to provide your own writer function to the document class.
 }
-
